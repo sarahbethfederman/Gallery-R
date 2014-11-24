@@ -12,8 +12,6 @@ mouse interaction but also function well on a static display.
 
 
 <h2>Tech used:</h2>
-    <ul>
-     <li>Browserify for module loading & dependency management</li>
-     <li> Sass (scss) for styling</li>
-     <li>Firebase for the backend (database)</li>
-     </ul>
+    - Browserify for module loading & dependency management
+    - Sass (scss) for styling
+    - Firebase for the backend (database)
