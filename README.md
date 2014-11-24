@@ -9,6 +9,8 @@ Motion Graphics Final Project
 
 
 Tech used:
-    - Browserify for module loading & dependency management
-    - Sass (scss) for styling
-    - Firebase for the backend (database)
+    <ul>
+     <li>Browserify for module loading & dependency management</li>
+     <li> Sass (scss) for styling</li>
+     <li>Firebase for the backend (database)</li>
+     </ul>
