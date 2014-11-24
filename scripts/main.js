@@ -4,14 +4,22 @@
  * uses Browserify for requiring modules (instead of requireJS)
  */
 
-var firebase = require('./dataLoader.js');
+var dataLoader = require('./dataLoader.js');
 var videoLoader = require('./videoLoader.js');
 var $ = require('jquery');
 
 $(document).ready(function() {
   console.log("inited!");
-  console.log("with watchify!");
-  //console.log(firebase);
+
+  var vidData;
+
+  dataLoader.getData(function(data) {
+    // once the data has loaded, assign it to vidData
+    vidData = data;
+    // initialize the videoloader with the loaded data
+    videoLoader.init(vidData);
+  });
+
 });
 
 

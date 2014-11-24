@@ -4,33 +4,64 @@
  * Loads video data from firebase
  */
 
-
 var Firebase = require('firebase');
+var $ = require('jquery');
 
-var ref = new Firebase('https://gallery-r.firebaseio.com/videos');
-var data;
+var dataLoader = {
+    'ref': new Firebase('https://gallery-r.firebaseio.com/videos'),
+    'vidData': undefined,
+    'loadData': function(callback) {
+        // loads the data from firebase
+        var self = this;
 
-ref.on("value", function(snapshot) {
-    data = snapshot.val();
-    console.log(data);
-});
+        self.ref.once("value", function(data) {
+            self.vidData = data.val();
 
-module.exports = data;
-},{"firebase":"/Users/Sarah/node_modules/firebase/lib/firebase-web.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/main.js":[function(require,module,exports){
+            // when done loading, run the callback function with the data we loaded
+            callback(self.vidData);
+        });
+    },
+    'getData': function(callback) {
+        // getter method for firebase data
+        var self = this;
+
+        // if the data has already loaded, return it
+        if (self.vidData) {
+            console.log("vidData exists");
+            callback(self.vidData);
+        } else {
+            console.log("vidData doesnt exist yet");
+            self.loadData(callback);
+        }
+    }
+};
+
+
+module.exports = dataLoader;
+
+},{"firebase":"/Users/Sarah/node_modules/firebase/lib/firebase-web.js","jquery":"/Users/Sarah/node_modules/jquery/dist/jquery.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/main.js":[function(require,module,exports){
 /**
  * Created by Sarah on 11/20/14.
  * Main js file
  * uses Browserify for requiring modules (instead of requireJS)
  */
 
-var firebase = require('./dataLoader.js');
+var dataLoader = require('./dataLoader.js');
 var videoLoader = require('./videoLoader.js');
 var $ = require('jquery');
 
 $(document).ready(function() {
   console.log("inited!");
-  console.log("with watchify!");
-  //console.log(firebase);
+
+  var vidData;
+
+  dataLoader.getData(function(data) {
+    // once the data has loaded, assign it to vidData
+    vidData = data;
+    // initialize the videoloader with the loaded data
+    videoLoader.init(vidData);
+  });
+
 });
 
 
@@ -41,7 +72,21 @@ $(document).ready(function() {
  * Created by Sarah on 11/24/14.
  */
 
-},{}],"/Users/Sarah/node_modules/firebase/lib/firebase-web.js":[function(require,module,exports){
+var $ = require('jquery');
+
+var videoLoader =  {
+    'urls': [],
+    'init': function(data) {
+        for (video in data) {
+            if (data.hasOwnProperty(video)) {
+                this.urls.push(data[video]['videoUrl']);
+                console.log(data[video]['videoUrl']);
+            }
+        }
+    }
+}
+module.exports = videoLoader;
+},{"jquery":"/Users/Sarah/node_modules/jquery/dist/jquery.js"}],"/Users/Sarah/node_modules/firebase/lib/firebase-web.js":[function(require,module,exports){
 /*! @license Firebase v2.0.4 - License: https://www.firebase.com/terms/terms-of-service.html */ (function() {var h,aa=this;function n(a){return void 0!==a}function ba(){}function ca(a){a.Qb=function(){return a.ef?a.ef:a.ef=new a}}
 function da(a){var b=typeof a;if("object"==b)if(a){if(a instanceof Array)return"array";if(a instanceof Object)return b;var c=Object.prototype.toString.call(a);if("[object Window]"==c)return"object";if("[object Array]"==c||"number"==typeof a.length&&"undefined"!=typeof a.splice&&"undefined"!=typeof a.propertyIsEnumerable&&!a.propertyIsEnumerable("splice"))return"array";if("[object Function]"==c||"undefined"!=typeof a.call&&"undefined"!=typeof a.propertyIsEnumerable&&!a.propertyIsEnumerable("call"))return"function"}else return"null";
 else if("function"==b&&"undefined"==typeof a.call)return"object";return b}function ea(a){return"array"==da(a)}function fa(a){var b=da(a);return"array"==b||"object"==b&&"number"==typeof a.length}function p(a){return"string"==typeof a}function ga(a){return"number"==typeof a}function ha(a){return"function"==da(a)}function ia(a){var b=typeof a;return"object"==b&&null!=a||"function"==b}function ja(a,b,c){return a.call.apply(a.bind,arguments)}

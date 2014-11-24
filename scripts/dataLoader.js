@@ -3,15 +3,37 @@
  * Loads video data from firebase
  */
 
-
 var Firebase = require('firebase');
+var $ = require('jquery');
 
-var ref = new Firebase('https://gallery-r.firebaseio.com/videos');
-var data;
+var dataLoader = {
+    'ref': new Firebase('https://gallery-r.firebaseio.com/videos'),
+    'vidData': undefined,
+    'loadData': function(callback) {
+        // loads the data from firebase
+        var self = this;
 
-ref.on("value", function(snapshot) {
-    data = snapshot.val();
-    console.log(data);
-});
+        self.ref.once("value", function(data) {
+            self.vidData = data.val();
 
-module.exports = data;
+            // when done loading, run the callback function with the data we loaded
+            callback(self.vidData);
+        });
+    },
+    'getData': function(callback) {
+        // getter method for firebase data
+        var self = this;
+
+        // if the data has already loaded, return it
+        if (self.vidData) {
+            console.log("vidData exists");
+            callback(self.vidData);
+        } else {
+            console.log("vidData doesnt exist yet");
+            self.loadData(callback);
+        }
+    }
+};
+
+
+module.exports = dataLoader;
