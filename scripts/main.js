@@ -5,11 +5,12 @@
 
 var dataLoader = require('./dataLoader.js');
 var videoLoader = require('./videoLoader.js');
-var $ = require('jquery')(window);
+var $ = require('jquery');
 
 
-module.exports = function() {
+$(document).ready(function() {
+  console.log("inited!");
+});
 
-  return controller;
-}
+
 

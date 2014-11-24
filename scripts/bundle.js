@@ -12,13 +12,15 @@
 
 var dataLoader = require('./dataLoader.js');
 var videoLoader = require('./videoLoader.js');
-var $ = require('jquery')(window);
+var $ = require('jquery');
 
 
-module.exports = function() {
 
-  return controller;
-}
+$(document).ready(function() {
+
+});
+
+
 
 
 },{"./dataLoader.js":1,"./videoLoader.js":3,"jquery":4}],3:[function(require,module,exports){
