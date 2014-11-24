@@ -4,22 +4,29 @@
  * uses Browserify for requiring modules (instead of requireJS)
  */
 
-var dataLoader = require('./dataLoader.js');
-var videoLoader = require('./videoLoader.js');
 var $ = require('jquery');
 
+var controller = {
+  'dataLoader': require('./dataLoader.js'),
+  'videoLoader': require('./videoLoader.js'),
+  'initVideos': function(data) {
+    // initialize the video loader
+    this.videoLoader.init(data);
+  },
+  'init': function() {
+    console.log("inited!");
+    var self = this;
+
+    // load the data w/ dataLoader module (from Firebase)
+    self.dataLoader.getData(function(data) {
+      // when done, initialize the videoLoader with the data
+      self.initVideos(data);
+    });
+  }
+};
+
 $(document).ready(function() {
-  console.log("inited!");
-
-  var vidData;
-
-  dataLoader.getData(function(data) {
-    // once the data has loaded, assign it to vidData
-    vidData = data;
-    // initialize the videoloader with the loaded data
-    videoLoader.init(vidData);
-  });
-
+  controller.init();
 });
 
 

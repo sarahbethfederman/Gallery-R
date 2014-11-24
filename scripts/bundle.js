@@ -5,7 +5,6 @@
  */
 
 var Firebase = require('firebase');
-var $ = require('jquery');
 
 var dataLoader = {
     'ref': new Firebase('https://gallery-r.firebaseio.com/videos'),
@@ -36,32 +35,38 @@ var dataLoader = {
     }
 };
 
-
 module.exports = dataLoader;
 
-},{"firebase":"/Users/Sarah/node_modules/firebase/lib/firebase-web.js","jquery":"/Users/Sarah/node_modules/jquery/dist/jquery.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/main.js":[function(require,module,exports){
+},{"firebase":"/Users/Sarah/node_modules/firebase/lib/firebase-web.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/main.js":[function(require,module,exports){
 /**
  * Created by Sarah on 11/20/14.
  * Main js file
  * uses Browserify for requiring modules (instead of requireJS)
  */
 
-var dataLoader = require('./dataLoader.js');
-var videoLoader = require('./videoLoader.js');
 var $ = require('jquery');
 
+var controller = {
+  'dataLoader': require('./dataLoader.js'),
+  'videoLoader': require('./videoLoader.js'),
+  'initVideos': function(data) {
+    // initialize the video loader
+    this.videoLoader.init(data);
+  },
+  'init': function() {
+    console.log("inited!");
+    var self = this;
+
+    // load the data w/ dataLoader module (from Firebase)
+    self.dataLoader.getData(function(data) {
+      // when done, initialize the videoLoader with the data
+      self.initVideos(data);
+    });
+  }
+};
+
 $(document).ready(function() {
-  console.log("inited!");
-
-  var vidData;
-
-  dataLoader.getData(function(data) {
-    // once the data has loaded, assign it to vidData
-    vidData = data;
-    // initialize the videoloader with the loaded data
-    videoLoader.init(vidData);
-  });
-
+  controller.init();
 });
 
 
@@ -83,8 +88,12 @@ var videoLoader =  {
                 console.log(data[video]['videoUrl']);
             }
         }
+    },
+    'draw': function() {
+
     }
-}
+};
+
 module.exports = videoLoader;
 },{"jquery":"/Users/Sarah/node_modules/jquery/dist/jquery.js"}],"/Users/Sarah/node_modules/firebase/lib/firebase-web.js":[function(require,module,exports){
 /*! @license Firebase v2.0.4 - License: https://www.firebase.com/terms/terms-of-service.html */ (function() {var h,aa=this;function n(a){return void 0!==a}function ba(){}function ca(a){a.Qb=function(){return a.ef?a.ef:a.ef=new a}}

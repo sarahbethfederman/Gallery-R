@@ -13,6 +13,10 @@ var videoLoader =  {
                 console.log(data[video]['videoUrl']);
             }
         }
+    },
+    'draw': function() {
+
     }
-}
+};
+
 module.exports = videoLoader;

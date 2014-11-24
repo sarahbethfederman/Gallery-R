@@ -4,7 +4,6 @@
  */
 
 var Firebase = require('firebase');
-var $ = require('jquery');
 
 var dataLoader = {
     'ref': new Firebase('https://gallery-r.firebaseio.com/videos'),
@@ -34,6 +33,5 @@ var dataLoader = {
         }
     }
 };
-
 
 module.exports = dataLoader;
