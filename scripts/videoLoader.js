@@ -21,9 +21,11 @@ var videoLoader =  {
 
         // progress bar
         $video.on('timeupdate', function() {
+            // get the percentage of video played
             var percentage = ($video[0].currentTime / $video[0].duration) * 100;
-            $progressBar.value = percentage;
-            console.log(percentage, $progressBar.value);
+
+            // set the progress bar value
+            $progressBar.val(percentage);
         });
     }
 };
