@@ -1,4 +1,6 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/dataLoader.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/buttons.js":[function(require,module,exports){
+
+},{}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/dataLoader.js":[function(require,module,exports){
 /**
  * Created by Sarah on 11/24/14.
  * Loads video data from firebase
@@ -49,6 +51,7 @@ var $ = require('jquery');
 var controller = {
   'dataLoader': require('./dataLoader.js'),
   'videoLoader': require('./videoLoader.js'),
+  'buttons': require('./buttons.js'),
   'initVideos': function(data) {
     // initialize the video loader
     this.videoLoader.init(data);
@@ -72,7 +75,7 @@ $(document).ready(function() {
 
 
 
-},{"./dataLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/dataLoader.js","./videoLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/videoLoader.js","jquery":"/Users/Sarah/node_modules/jquery/dist/jquery.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/videoLoader.js":[function(require,module,exports){
+},{"./buttons.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/buttons.js","./dataLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/dataLoader.js","./videoLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/videoLoader.js","jquery":"/Users/Sarah/node_modules/jquery/dist/jquery.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/videoLoader.js":[function(require,module,exports){
 /**
  * Created by Sarah on 11/24/14.
  */
@@ -88,9 +91,18 @@ var videoLoader =  {
                 console.log(data[video]['videoUrl']);
             }
         }
+        this.progressBar();
     },
-    'draw': function() {
+    'progressBar': function() {
+        var $progressBar = $('#progress-bar');
+        var $video = $('video');
 
+        // progress bar
+        $video.on('timeupdate', function() {
+            var percentage = ($video[0].currentTime / $video[0].duration) * 100;
+            $progressBar.value = percentage;
+            console.log(percentage, $progressBar.value);
+        });
     }
 };
 

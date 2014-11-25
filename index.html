@@ -6,19 +6,18 @@
     <link href="style/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-    <div class="content-container">
-
+    <div class="overlay-container">
+        <a class="button--intro" rel="js-skip-btn">Skip Intro</a>
     </div>
 
     <div class="slide-container">
-
+        <progress id="progress-bar" min='0' max='100' value='0'>0% played</progress>
+        <video autoplay>
+            <source src="assets/videos/intro.mp4" type="video/mp4">
+            <!--<source src="intro.webm" type="video/webm">-->
+            Your browser does not support the HTML5 video tag!
+        </video>
     </div>
-
-    <!--<video id="background" poster="img/poster.png" autoplay>-->
-        <!--<source src="movie.mp4" type="video/mp4">-->
-        <!--<source src="movie.webm" type="video/webm">-->
-        <!--Your browser does not support the HTML5 video tag!-->
-    <!--</video>-->
 
     <!-- Load the concatenated bundle from Browserify-->
     <script src="scripts/bundle.js"></script>

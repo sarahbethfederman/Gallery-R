@@ -9,6 +9,7 @@ var $ = require('jquery');
 var controller = {
   'dataLoader': require('./dataLoader.js'),
   'videoLoader': require('./videoLoader.js'),
+  'buttons': require('./buttons.js'),
   'initVideos': function(data) {
     // initialize the video loader
     this.videoLoader.init(data);

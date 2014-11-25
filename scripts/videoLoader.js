@@ -13,9 +13,18 @@ var videoLoader =  {
                 console.log(data[video]['videoUrl']);
             }
         }
+        this.progressBar();
     },
-    'draw': function() {
+    'progressBar': function() {
+        var $progressBar = $('#progress-bar');
+        var $video = $('video');
 
+        // progress bar
+        $video.on('timeupdate', function() {
+            var percentage = ($video[0].currentTime / $video[0].duration) * 100;
+            $progressBar.value = percentage;
+            console.log(percentage, $progressBar.value);
+        });
     }
 };
 
