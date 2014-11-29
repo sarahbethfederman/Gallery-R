@@ -58,7 +58,46 @@ var dataLoader = {
 
 module.exports = dataLoader;
 
-},{"firebase":"/Users/Sarah/node_modules/firebase/lib/firebase-web.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/main.js":[function(require,module,exports){
+},{"firebase":"/Users/Sarah/node_modules/firebase/lib/firebase-web.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/introLoader.js":[function(require,module,exports){
+// Loads the intro sequence
+
+var mainLoop = require('./mainLoop.js');
+var buttons = require('./buttons.js');
+var videoModule = require('./video.js');
+
+var introLoader = {
+    'init': function(container, video, progressBar, skipBtn) {
+        var self = this;
+
+        // set up the skip button
+        buttons.makeButton(skipBtn, self.endIntro);
+
+        // loader animation
+        video.addEventListener('progress', function () {
+            videoModule.loaderStart(container);
+        });
+
+        video.addEventListener('canplay', function () {
+            videoModule.loaderEnd(container);
+        });
+
+        // progress bar length corresponds to timeupdate function
+        video.addEventListener('timeupdate', function() {
+            videoModule.progressBar(video, progressBar);
+        });
+
+        // when the video ends
+        video.addEventListener('ended', self.endIntro);
+    },
+    'endIntro': function() {
+        // fade out the whole intro container
+
+        // then start the main loop
+    }
+};
+
+module.exports = introLoader;
+},{"./buttons.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/buttons.js","./mainLoop.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/mainLoop.js","./video.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/video.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/main.js":[function(require,module,exports){
 /**
  * Created by Sarah on 11/20/14.
  * Main js file
@@ -67,21 +106,26 @@ module.exports = dataLoader;
 
 var controller = {
   'dataLoader': require('./dataLoader.js'),
-  'videoLoader': require('./videoLoader.js'),
   'buttons': require('./buttons.js'),
-  'initVideos': function(data) {
-    // initialize the video loader
-    this.videoLoader.init(data);
-  },
+  'introLoader': require('./introLoader.js'),
+  'mainLoop': require('./mainLoop.js'),
   'init': function() {
     console.log("inited!");
     var self = this;
 
-    // load the data w/ dataLoader module (from Firebase)
+    var introVid = document.querySelector('[rel="js-intro-vid"'),
+        introProgress = document.querySelector('[rel="js-intro-progress"'),
+        skipBtn = document.querySelector('[rel="js-skip-intro"'),
+        introContainer = document.querySelector('.intro-container');
+
+    // start the intro sequence
+    self.introLoader.init(introContainer, introVid, introProgress, skipBtn);
+
+    // Load the data from Firebase
     self.dataLoader.getData(function(data) {
-      // when done, initialize the videoLoader with the data
-      self.initVideos(data);
+      // when done loading, set up the mainLoop
     });
+
   }
 };
 
@@ -90,7 +134,124 @@ document.addEventListener("DOMContentLoaded", function(event) {
   controller.init();
 });
 
-},{"./buttons.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/buttons.js","./dataLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/dataLoader.js","./videoLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/videoLoader.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/videoLoader.js":[function(require,module,exports){
+},{"./buttons.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/buttons.js","./dataLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/dataLoader.js","./introLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/introLoader.js","./mainLoop.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/mainLoop.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/mainLoop.js":[function(require,module,exports){
+// Main loop
+
+var Slide = require('./slide.js');  // Slide module
+
+var loop = {
+    'videoData': undefined,
+    'slides': [],
+    'init': function(data) {
+        this.videoData = data;
+
+        // create a slide for each video
+        for (video in this.videoData) {
+            var slide = new Slide();
+            this.slides.push(slide);
+        }
+    },
+    'startLoop': function() {
+        // hide the intro container
+
+
+
+    },
+
+    'next': function() {
+
+    }
+};
+
+module.exports = loop;
+},{"./slide.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slide.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slide.js":[function(require,module,exports){
+// slide module
+
+var buttonModule = require('./buttons.js');
+
+var Slide = function() {
+    var Slide = function(container, overlay, video) {           // constructor takes a JSON object
+        this.posterUrl = video['posterUrl'];
+        this.bioPic = video['bioPic'];
+        this.bioCopy = video['bioCopy'];
+
+        if (video['videoUrl']) {
+            this.videoUrl = video['videoUrl'];
+        }
+    };
+
+
+    Slide.prototype.cycleIn = function() {              // start this slide
+        // set up the video
+
+        // set up the video control buttons
+
+        // set up the header
+    };
+
+    Slide.prototype.cycleOut = function(callback) {     // end & move this slide out
+        // stop the video
+
+        // remove the header
+
+        // animate everything out
+
+        // if there's a callback, execute it
+        if (callback) {
+            callback();
+        }
+    };
+
+    Slide.prototype.hideExtras = function() {           // hide the overlay content
+        // fade out the overlay div
+    };
+
+    return Slide;
+}();
+
+
+module.exports = Slide;
+},{"./buttons.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/buttons.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/video.js":[function(require,module,exports){
+/**
+ * Collection of video events
+ * Created by Sarah on 11/28/14.
+ */
+
+
+var video = {
+    'progressBar': function(video, progressBar) {
+        // get the percentage of video played
+        var percentage = (video.currentTime / video.duration) * 100;
+
+        // set the progress bar value
+        progressBar.value = percentage;
+    },
+    'loaderStart': function(root) {
+        console.log("loaderStart fired");
+
+        // create the loader div
+        var loader = document.createElement('div');
+        loader.classList.add('loader');
+
+        // fill it with the loader SVG
+        loader.innerHTML = '<svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"width="80px" height="80px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve"><path fill="#000" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z"> <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"/></path></svg>';
+        root.appendChild(loader);
+        console.log(loader);
+    },
+    'loaderEnd': function(root) {
+        console.log("canplay event fired");
+        var loader = root.querySelector('.loader');
+
+        // fade out the loader
+        loader.classList.add('fade-out');
+
+        // remove it from the DOM
+        // root.removeChild(loader);
+    }
+};
+
+module.exports = video;
+},{}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/videoLoader.js":[function(require,module,exports){
 /**
  * Created by Sarah on 11/24/14.
  */

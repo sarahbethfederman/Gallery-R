@@ -6,21 +6,26 @@
 
 var controller = {
   'dataLoader': require('./dataLoader.js'),
-  'videoLoader': require('./videoLoader.js'),
   'buttons': require('./buttons.js'),
-  'initVideos': function(data) {
-    // initialize the video loader
-    this.videoLoader.init(data);
-  },
+  'introLoader': require('./introLoader.js'),
+  'mainLoop': require('./mainLoop.js'),
   'init': function() {
     console.log("inited!");
     var self = this;
 
-    // load the data w/ dataLoader module (from Firebase)
+    var introVid = document.querySelector('[rel="js-intro-vid"'),
+        introProgress = document.querySelector('[rel="js-intro-progress"'),
+        skipBtn = document.querySelector('[rel="js-skip-intro"'),
+        introContainer = document.querySelector('.intro-container');
+
+    // start the intro sequence
+    self.introLoader.init(introContainer, introVid, introProgress, skipBtn);
+
+    // Load the data from Firebase
     self.dataLoader.getData(function(data) {
-      // when done, initialize the videoLoader with the data
-      self.initVideos(data);
+      // when done loading, set up the mainLoop
     });
+
   }
 };
 

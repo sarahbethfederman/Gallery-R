@@ -1,0 +1,19 @@
+// Holds state classes
+
+.loader {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-40px, -40px);
+}
+
+svg path,
+svg rect{
+  fill: lightblue;
+}
+
+.hide {
+  display: none;
+}
