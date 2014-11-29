@@ -4,8 +4,6 @@
  * uses Browserify for requiring modules (instead of requireJS)
  */
 
-var $ = require('jquery');
-
 var controller = {
   'dataLoader': require('./dataLoader.js'),
   'videoLoader': require('./videoLoader.js'),
@@ -26,9 +24,7 @@ var controller = {
   }
 };
 
-$(document).ready(function() {
+
+document.addEventListener("DOMContentLoaded", function(event) {
   controller.init();
 });
-
-
-
