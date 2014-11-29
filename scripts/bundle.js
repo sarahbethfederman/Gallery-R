@@ -6,11 +6,15 @@ var buttons = {
     'makeButton': function(button, clickEvent) {
         button.addEventListener('click', clickEvent);
     },
+    'initVidBtns': function() {
+
+    },
     'init': function() {
         // make the skipIntro button start the video loop
         this.makeButton(skipIntroBtn, videoLoader.loop);
 
         // make the video control buttons
+        this.initVidBtns();
     }
 };
 
@@ -108,8 +112,13 @@ var videoLoader =  {
 
         //  store the urls for all of the loaded videos
         for (vid in data) {
-            if (data.hasOwnProperty(vid)) {     // protect against prototype chain search
-                self.urls.push(data[vid]['videoUrl']);
+        if (data.hasOwnProperty(vid)) {                         // protect against prototype chain search
+            if (data[vid]['videoUrl']) {                        // if it has a video url, save it
+                    self.urls.push(data[vid]['videoUrl']);
+                }
+                else {                                          // else, save the poster url
+                    self.urls.push(data[vid]['posterUrl']);
+                }
                 console.log(data[vid]['videoUrl']);
             }
         }
@@ -135,8 +144,11 @@ var videoLoader =  {
         var self = this;
         console.log("looped");
 
-        // change the source of the video to the next url
-        self.video.src = self.urls[self.currentVideo];
+        if (self.urls[self.currentVideo]) {     // if the current video ends in .mp4, assign it to src
+            self.video.src = self.urls[self.currentVideo];
+        } else {                                // else, set the poster image
+
+        }
 
         // increment the current video
         self.currentVideo++;

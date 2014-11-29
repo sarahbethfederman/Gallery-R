@@ -1,0 +1,26 @@
+// Style video elements
+
+video {
+  width: 100%;
+  height: 100%;
+  background-color: #111;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+}
+
+progress {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: .7;
+}
+
+progress::-webkit-progress-value {
+  background-color: #FFF;
+}

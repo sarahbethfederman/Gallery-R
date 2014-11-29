@@ -1,0 +1,30 @@
+// Button Styles
+
+.button {
+  padding: 15px;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: .4rem;
+  font-weight: 100;
+  border-radius: 4px;
+  display: block;
+  cursor: pointer;
+  background-color: rgba(0,0,0, .3);
+  border: 1px solid #eee;
+  opacity: .6;
+  transition: all .2s linear;
+  &:hover {
+    opacity: 1;
+  }
+  &--intro {
+    @extend .button;
+    width: 200px;
+    height: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-100px);
+  }
+}
