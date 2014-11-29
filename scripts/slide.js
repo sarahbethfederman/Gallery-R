@@ -8,6 +8,8 @@ var Slide = function() {
         this.posterUrl = videoData['posterUrl'];
         this.bioPic = videoData['bioPic'];
         this.bioCopy = videoData['bioCopy'];
+        this.container = container;
+        this.videoEl = container.querySelector('video');
 
         if (videoData['videoUrl']) {
             this.videoUrl = video['videoUrl'];
@@ -17,10 +19,16 @@ var Slide = function() {
 
     Slide.prototype.cycleIn = function() {              // start this slide
         // set up the video
-
-        // set up the video control buttons
+        if (this.videoUrl) {
+            this.videoEl.src = this.videoUrl;                  // if there is a video, play it
+        } else {
+            this.videoEl.removeAttribute('src');               // else, display the poster
+            //this.videoEl.duration = 45;
+            this.videoEl.poster = this.posterUrl;
+        }
 
         // set up the header
+        this.createHeader()
     };
 
     Slide.prototype.cycleOut = function(callback) {     // end & move this slide out
@@ -36,9 +44,15 @@ var Slide = function() {
         }
     };
 
-    Slide.prototype.hideExtras = function() {           // hide the overlay content
-        // fade out the overlay div
-    };
+    Slide.prototype.createHeader = function() {
+        var header = this.contentContainer.querySelector('header');
+
+        // set the bio picture
+        header.querySelector('bio__pic').src = this.bioPic;
+
+        // set the bio copy
+        header.querySelector('bio__copy').innerHTML = this.bioCopy;
+    }
 
     return Slide;
 }();
