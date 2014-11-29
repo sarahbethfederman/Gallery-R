@@ -10,7 +10,7 @@ var introLoader = {
 
         // set up the skip button
         buttons.makeButton(skipBtn, function() {
-            self.endIntro(container);
+            self.endIntro(container, video);
         });
 
         // loader animation
@@ -29,15 +29,21 @@ var introLoader = {
 
         // when the video ends
         video.addEventListener('ended', function() {
-            self.endIntro(container);
+            self.endIntro(container, video);
         });
     },
-    'endIntro': function(container) {
+    'endIntro': function(container, video) {
         // fade out the whole intro container
         container.classList.add('fade-out');
 
+        video.pause();
+
         // then start the main loop
         mainLoop.init();
+
+        setTimeout(function() {
+            document.body.removeChild(container);
+        }, 300);
     }
 };
 

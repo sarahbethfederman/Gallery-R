@@ -3,6 +3,7 @@
  * Loads video data from firebase
  */
 
+// require Firebase from node.js
 var Firebase = require('firebase');
 
 var dataLoader = {

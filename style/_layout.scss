@@ -8,9 +8,15 @@
 }
 
 .content-container {
-  display: none;    // hide content overlay on load
+  //display: none;    // hide content overlay on load
+  float: left;
 }
 
 .video-container {
   display: none;    // hide main loop on load
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  z-index: -1;
 }

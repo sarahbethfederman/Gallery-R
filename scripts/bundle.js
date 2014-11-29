@@ -1,30 +1,22 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/buttons.js":[function(require,module,exports){
 
 var buttons = {
-    'videoLoader': require('./videoLoader.js'),
-    'skipIntroBtn': document.querySelector('[rel="js-skip-btn]'),
     'makeButton': function(button, clickEvent) {
         button.addEventListener('click', clickEvent);
     },
     'initVidBtns': function() {
 
-    },
-    'init': function() {
-        // make the skipIntro button start the video loop
-        this.makeButton(skipIntroBtn, videoLoader.loop);
-
-        // make the video control buttons
-        this.initVidBtns();
     }
 };
 
 module.exports = buttons;
-},{"./videoLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/videoLoader.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/dataLoader.js":[function(require,module,exports){
+},{}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/dataLoader.js":[function(require,module,exports){
 /**
  * Created by Sarah on 11/24/14.
  * Loads video data from firebase
  */
 
+// require Firebase from node.js
 var Firebase = require('firebase');
 
 var dataLoader = {
@@ -73,7 +65,7 @@ var introLoader = {
 
         // set up the skip button
         buttons.makeButton(skipBtn, function() {
-            self.endIntro(container);
+            self.endIntro(container, video);
         });
 
         // loader animation
@@ -92,15 +84,21 @@ var introLoader = {
 
         // when the video ends
         video.addEventListener('ended', function() {
-            self.endIntro(container);
+            self.endIntro(container, video);
         });
     },
-    'endIntro': function(container) {
+    'endIntro': function(container, video) {
         // fade out the whole intro container
         container.classList.add('fade-out');
 
+        video.pause();
+
         // then start the main loop
         mainLoop.init();
+
+        setTimeout(function() {
+            document.body.removeChild(container);
+        }, 300);
     }
 };
 
@@ -109,7 +107,7 @@ module.exports = introLoader;
 /**
  * Created by Sarah on 11/20/14.
  * Main js file
- * uses Browserify for requiring modules (instead of requireJS)
+ * uses Browserify for requiring modules (instead of requireJS like on the last project)
  */
 
 var controller = {
@@ -121,15 +119,19 @@ var controller = {
     console.log("inited!");
     var self = this;
 
+    // HOOK UP DOM
     var introVid = document.querySelector('[rel="js-intro-vid"'),
         introProgress = document.querySelector('[rel="js-intro-progress"'),
         skipBtn = document.querySelector('[rel="js-skip-intro"'),
         introContainer = document.querySelector('.intro-container');
 
-    // start the intro sequence
+    this.mainLoop.videoContainer = document.querySelector('.video-container');
+    this.mainLoop.contentContainer = document.querySelector('.content-container');
+
+    // START THE INTRO
     self.introLoader.init(introContainer, introVid, introProgress, skipBtn);
 
-    // Load the data from Firebase
+    // PRELOAD DATA from Firebase
     self.dataLoader.loadData();
   }
 };
@@ -144,44 +146,86 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 var Slide = require('./slide.js');  // Slide module
 var dataLoader = require('./dataLoader.js');
+var videoModule = require('./video.js');
 
 var loop = {
     'videoData': undefined,
     'slides': [],
     'currentSlide': undefined,
+    'videoContainer': undefined,
+    'contentContainer': undefined,
     'init': function() {
-        var self = this;
+        var self = this,
+            video = self.videoContainer.querySelector('video'),
+            progressBar = self.videoContainer.querySelector('progress');
 
-        // get the video data
-        // when loaded, create the slides
-        self.videoData = dataLoader.getData(self.createSlides);
+        // display the video
+        self.videoContainer.style.display = "block";
 
-        self.currentSlide = 0;
+        // loader animation
+        video.addEventListener('progress', function () {
+            videoModule.loaderStart(self.videoContainer);
+        });
+
+        video.addEventListener('canplay', function () {
+            videoModule.loaderEnd(self.videoContainer);
+        });
+
+        // progress bar length corresponds to timeupdate function
+        video.addEventListener('timeupdate', function() {
+            videoModule.progressBar(video, progressBar);
+        });
+
+        // once the video has ended, loop to the next one
+        video.addEventListener('ended', function() {
+            self.next();
+        });
+
+        // get the video data. When loaded, create the slides
+        dataLoader.getData(self.createSlides.bind(this));
     },
-    'createSlides': function() {
+    'createSlides': function(vidData) {
+        this.videoData = vidData;
+
         // create a slide for each video
-        for (video in this.videoData) {
-            if (this.videoData.hasOwnProperty(video)) {     // don't iterate over prototype chain
-                var slide = new Slide(video);
-                this.slides.push(slide);
-            }
+        for (var i = 0; i < this.videoData.length; i++) {
+            var slide = new Slide(this.videoData[i], this.videoContainer, this.contentContainer);
+            this.slides.push(slide);
         }
+
+        // start looping
+        this.startLoop();
     },
     'startLoop': function() {
-        slides[currentSlide].cycleIn();
-    },
+        // set the currentSlide to the beginning
+        this.currentSlide = 0;
 
+        // cycle the current slide in
+        this.next();
+    },
     'next': function(target) {
-        if (target) {   // to do: check for typeof number
-            slides[target].cycleIn();
-        } else {
-            slides[this.currentSlide].cycleIn();
+        console.log(this.currentSlide);
+
+        // once at the end, wrap around to loop
+        if (this.currentSlide > this.slides.length-1) {
+            this.currentSlide = 0;
         }
+
+        if (target) {                               // if navigating to a specific slide  TO DO: check for typeof number
+            this.slides[target].cycleIn();
+            // set current slide to the target
+            //this.currentSlide = this.slides[target];
+        } else {                                        // else, go to the next slide
+            this.slides[this.currentSlide].cycleIn();
+        }
+
+        // iterate to next slide
+        this.currentSlide++;
     }
 };
 
 module.exports = loop;
-},{"./dataLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/dataLoader.js","./slide.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slide.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slide.js":[function(require,module,exports){
+},{"./dataLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/dataLoader.js","./slide.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slide.js","./video.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/video.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slide.js":[function(require,module,exports){
 // slide module
 
 var buttonModule = require('./buttons.js');
@@ -193,10 +237,12 @@ var Slide = function() {
         this.bioPic = videoData['bioPic'];
         this.bioCopy = videoData['bioCopy'];
         this.container = container;
-        this.videoEl = container.querySelector('video');
+        this.contentContainer = contentContainer;
+        this.videoEl = container.querySelector('.video-loop');
+        console.log(videoData);
 
         if (videoData['videoUrl']) {
-            this.videoUrl = video['videoUrl'];
+            this.videoUrl = videoData['videoUrl'];
         }
     };
 
@@ -205,6 +251,7 @@ var Slide = function() {
         // set up the video
         if (this.videoUrl) {
             this.videoEl.src = this.videoUrl;                  // if there is a video, play it
+            this.videoEl.play();
         } else {
             this.videoEl.removeAttribute('src');               // else, display the poster
             //this.videoEl.duration = 45;
@@ -212,7 +259,7 @@ var Slide = function() {
         }
 
         // set up the header
-        this.createHeader()
+        this.createHeader();
     };
 
     Slide.prototype.cycleOut = function(callback) {     // end & move this slide out
@@ -232,10 +279,10 @@ var Slide = function() {
         var header = this.contentContainer.querySelector('header');
 
         // set the bio picture
-        header.querySelector('bio__pic').src = this.bioPic;
+        //header.querySelector('.bio__pic').src = this.bioPic;
 
         // set the bio copy
-        header.querySelector('bio__copy').innerHTML = this.bioCopy;
+       // header.querySelector('.bio__copy').innerHTML = this.bioCopy;
     }
 
     return Slide;
@@ -281,77 +328,6 @@ var video = {
 };
 
 module.exports = video;
-},{}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/videoLoader.js":[function(require,module,exports){
-/**
- * Created by Sarah on 11/24/14.
- */
-
-var videoLoader =  {
-    'urls': [],
-    'currentVideo': undefined,
-    "video": document.querySelector('video'),
-    "source": document.querySelector('video source'),
-    "progress": document.querySelector('progress'),
-    'init': function(data) {
-        var self = this;
-
-        // set current video to 0
-        self.currentVideo = 0;
-
-        // start the progress bar
-        self.progressBar();
-
-        //  store the urls for all of the loaded videos
-        for (vid in data) {
-        if (data.hasOwnProperty(vid)) {                         // protect against prototype chain search
-            if (data[vid]['videoUrl']) {                        // if it has a video url, save it
-                    self.urls.push(data[vid]['videoUrl']);
-                }
-                else {                                          // else, save the poster url
-                    self.urls.push(data[vid]['posterUrl']);
-                }
-                console.log(data[vid]['videoUrl']);
-            }
-        }
-
-        // when the video ends, start the loop
-        self.video.addEventListener('ended', self.loop.bind(self), false);
-    },
-    'progressBar': function() {
-        var self = this;
-
-        // progress bar length corresponds to timeupdate function
-        self.video.addEventListener('timeupdate', function() {
-
-            // get the percentage of video played
-            var percentage = (self.video.currentTime / self.video.duration) * 100;
-
-            // set the progress bar value
-            self.progress.value = percentage;
-        });
-    },
-    'loop': function() {
-        // TO DO: ADD LOADER EVENT
-        var self = this;
-        console.log("looped");
-
-        if (self.urls[self.currentVideo]) {     // if the current video ends in .mp4, assign it to src
-            self.video.src = self.urls[self.currentVideo];
-        } else {                                // else, set the poster image
-
-        }
-
-        // increment the current video
-        self.currentVideo++;
-
-        // when it hits the ends of the array, reset
-        if (self.currentVideo > self.urls.length) {
-            self.currentVideo = 0;
-        }
-    }
-};
-
-module.exports = videoLoader;
 },{}],"/Users/Sarah/node_modules/firebase/lib/firebase-web.js":[function(require,module,exports){
 /*! @license Firebase v2.0.4 - License: https://www.firebase.com/terms/terms-of-service.html */ (function() {var h,aa=this;function n(a){return void 0!==a}function ba(){}function ca(a){a.Qb=function(){return a.ef?a.ef:a.ef=new a}}
 function da(a){var b=typeof a;if("object"==b)if(a){if(a instanceof Array)return"array";if(a instanceof Object)return b;var c=Object.prototype.toString.call(a);if("[object Window]"==c)return"object";if("[object Array]"==c||"number"==typeof a.length&&"undefined"!=typeof a.splice&&"undefined"!=typeof a.propertyIsEnumerable&&!a.propertyIsEnumerable("splice"))return"array";if("[object Function]"==c||"undefined"!=typeof a.call&&"undefined"!=typeof a.propertyIsEnumerable&&!a.propertyIsEnumerable("call"))return"function"}else return"null";
