@@ -38,7 +38,9 @@ var dataLoader = {
             self.vidData = data.val();
 
             // when done loading, run the callback function with the data we loaded
-            callback(self.vidData);
+            if (callback) {
+                callback(self.vidData);
+            }
         });
     },
     'getData': function(callback) {
@@ -70,7 +72,9 @@ var introLoader = {
         var self = this;
 
         // set up the skip button
-        buttons.makeButton(skipBtn, self.endIntro);
+        buttons.makeButton(skipBtn, function() {
+            self.endIntro(container);
+        });
 
         // loader animation
         video.addEventListener('progress', function () {
@@ -87,12 +91,16 @@ var introLoader = {
         });
 
         // when the video ends
-        video.addEventListener('ended', self.endIntro);
+        video.addEventListener('ended', function() {
+            self.endIntro(container);
+        });
     },
-    'endIntro': function() {
+    'endIntro': function(container) {
         // fade out the whole intro container
+        container.classList.add('fade-out');
 
         // then start the main loop
+        mainLoop.init();
     }
 };
 
@@ -122,10 +130,7 @@ var controller = {
     self.introLoader.init(introContainer, introVid, introProgress, skipBtn);
 
     // Load the data from Firebase
-    self.dataLoader.getData(function(data) {
-      // when done loading, set up the mainLoop
-    });
-
+    self.dataLoader.loadData();
   }
 };
 
@@ -138,44 +143,57 @@ document.addEventListener("DOMContentLoaded", function(event) {
 // Main loop
 
 var Slide = require('./slide.js');  // Slide module
+var dataLoader = require('./dataLoader.js');
 
 var loop = {
     'videoData': undefined,
     'slides': [],
-    'init': function(data) {
-        this.videoData = data;
+    'currentSlide': undefined,
+    'init': function() {
+        var self = this;
 
+        // get the video data
+        // when loaded, create the slides
+        self.videoData = dataLoader.getData(self.createSlides);
+
+        self.currentSlide = 0;
+    },
+    'createSlides': function() {
         // create a slide for each video
         for (video in this.videoData) {
-            var slide = new Slide();
-            this.slides.push(slide);
+            if (this.videoData.hasOwnProperty(video)) {     // don't iterate over prototype chain
+                var slide = new Slide(video);
+                this.slides.push(slide);
+            }
         }
     },
     'startLoop': function() {
-        // hide the intro container
-
-
-
+        slides[currentSlide].cycleIn();
     },
 
-    'next': function() {
-
+    'next': function(target) {
+        if (target) {   // to do: check for typeof number
+            slides[target].cycleIn();
+        } else {
+            slides[this.currentSlide].cycleIn();
+        }
     }
 };
 
 module.exports = loop;
-},{"./slide.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slide.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slide.js":[function(require,module,exports){
+},{"./dataLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/dataLoader.js","./slide.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slide.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slide.js":[function(require,module,exports){
 // slide module
 
 var buttonModule = require('./buttons.js');
+var videoModule = require('./video.js');
 
 var Slide = function() {
-    var Slide = function(container, overlay, video) {           // constructor takes a JSON object
-        this.posterUrl = video['posterUrl'];
-        this.bioPic = video['bioPic'];
-        this.bioCopy = video['bioCopy'];
+    var Slide = function(videoData, container, contentContainer) {           // videoData is JSON object
+        this.posterUrl = videoData['posterUrl'];
+        this.bioPic = videoData['bioPic'];
+        this.bioCopy = videoData['bioCopy'];
 
-        if (video['videoUrl']) {
+        if (videoData['videoUrl']) {
             this.videoUrl = video['videoUrl'];
         }
     };
@@ -211,7 +229,7 @@ var Slide = function() {
 
 
 module.exports = Slide;
-},{"./buttons.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/buttons.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/video.js":[function(require,module,exports){
+},{"./buttons.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/buttons.js","./video.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/video.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/video.js":[function(require,module,exports){
 /**
  * Collection of video events
  * Created by Sarah on 11/28/14.
@@ -227,8 +245,6 @@ var video = {
         progressBar.value = percentage;
     },
     'loaderStart': function(root) {
-        console.log("loaderStart fired");
-
         // create the loader div
         var loader = document.createElement('div');
         loader.classList.add('loader');
@@ -239,13 +255,13 @@ var video = {
         console.log(loader);
     },
     'loaderEnd': function(root) {
-        console.log("canplay event fired");
         var loader = root.querySelector('.loader');
 
         // fade out the loader
         loader.classList.add('fade-out');
 
         // remove it from the DOM
+        // FIX: FIRES TOO SOON
         // root.removeChild(loader);
     }
 };

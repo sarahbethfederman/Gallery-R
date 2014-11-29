@@ -1,14 +1,15 @@
 // slide module
 
 var buttonModule = require('./buttons.js');
+var videoModule = require('./video.js');
 
 var Slide = function() {
-    var Slide = function(container, overlay, video) {           // constructor takes a JSON object
-        this.posterUrl = video['posterUrl'];
-        this.bioPic = video['bioPic'];
-        this.bioCopy = video['bioCopy'];
+    var Slide = function(videoData, container, contentContainer) {           // videoData is JSON object
+        this.posterUrl = videoData['posterUrl'];
+        this.bioPic = videoData['bioPic'];
+        this.bioCopy = videoData['bioCopy'];
 
-        if (video['videoUrl']) {
+        if (videoData['videoUrl']) {
             this.videoUrl = video['videoUrl'];
         }
     };

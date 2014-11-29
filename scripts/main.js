@@ -22,10 +22,7 @@ var controller = {
     self.introLoader.init(introContainer, introVid, introProgress, skipBtn);
 
     // Load the data from Firebase
-    self.dataLoader.getData(function(data) {
-      // when done loading, set up the mainLoop
-    });
-
+    self.dataLoader.loadData();
   }
 };
 

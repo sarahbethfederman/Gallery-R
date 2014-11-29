@@ -16,7 +16,9 @@ var dataLoader = {
             self.vidData = data.val();
 
             // when done loading, run the callback function with the data we loaded
-            callback(self.vidData);
+            if (callback) {
+                callback(self.vidData);
+            }
         });
     },
     'getData': function(callback) {

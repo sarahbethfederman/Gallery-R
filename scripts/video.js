@@ -13,8 +13,6 @@ var video = {
         progressBar.value = percentage;
     },
     'loaderStart': function(root) {
-        console.log("loaderStart fired");
-
         // create the loader div
         var loader = document.createElement('div');
         loader.classList.add('loader');
@@ -25,13 +23,13 @@ var video = {
         console.log(loader);
     },
     'loaderEnd': function(root) {
-        console.log("canplay event fired");
         var loader = root.querySelector('.loader');
 
         // fade out the loader
         loader.classList.add('fade-out');
 
         // remove it from the DOM
+        // FIX: FIRES TOO SOON
         // root.removeChild(loader);
     }
 };
