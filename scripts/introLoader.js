@@ -18,7 +18,7 @@ var introLoader = {
             videoModule.loaderStart(container);
         });
 
-        video.addEventListener('canplay', function () {
+        video.addEventListener('loadeddata', function () {
             videoModule.loaderEnd(container);
         });
 

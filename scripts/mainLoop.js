@@ -18,24 +18,10 @@ var loop = {
         // display the video
         self.videoContainer.style.display = "block";
 
-        // loader animation
-        video.addEventListener('progress', function () {
-            videoModule.loaderStart(self.videoContainer);
-        });
+        // display the content
+        self.contentContainer.style.display = "block";
 
-        video.addEventListener('canplay', function () {
-            videoModule.loaderEnd(self.videoContainer);
-        });
-
-        // progress bar length corresponds to timeupdate function
-        video.addEventListener('timeupdate', function() {
-            videoModule.progressBar(video, progressBar);
-        });
-
-        // once the video has ended, loop to the next one
-        video.addEventListener('ended', function() {
-            self.next();
-        });
+        self.initEvents(video, progressBar);
 
         // get the video data. When loaded, create the slides
         dataLoader.getData(self.createSlides.bind(this));
@@ -54,6 +40,30 @@ var loop = {
 
         // start looping
         this.startLoop();
+    },
+    'initEvents': function(video, progressBar) {
+        // loader animation
+        var self = this;
+
+        video.addEventListener('loadstart', function () {
+            videoModule.loaderStart(self.videoContainer);
+            console.log("loader started");
+        });
+
+        video.addEventListener('loadeddata', function () {
+            videoModule.loaderEnd(self.videoContainer);
+            console.log("loader ended");
+        });
+
+        // progress bar length corresponds to timeupdate function
+        video.addEventListener('timeupdate', function() {
+            videoModule.progressBar(video, progressBar);
+        });
+
+        // once the video has ended, loop to the next one
+        video.addEventListener('ended', function() {
+            self.next();
+        });
     },
     'startLoop': function() {
         // set the currentSlide to the beginning

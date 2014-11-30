@@ -5,14 +5,15 @@ var videoModule = require('./video.js');
 
 var Slide = function() {
     var Slide = function(videoData, container, contentContainer) {           // videoData is JSON object
-        this.posterUrl = videoData['posterUrl'];
-        this.bioPic = videoData['bioPic'];
-        this.bioCopy = videoData['bioCopy'];
-        this.interviewee = videoData['interviewee'];
-        this.interviewer = videoData['interviewer'];
-        this.container = container;
-        this.contentContainer = contentContainer;
-        this.videoEl = container.querySelector('.video-loop');
+        this.fillerUrl = "assets/videos/filler.mp4";                    // path to filler video
+        this.posterUrl = videoData['posterUrl'];                        // path to poster URL
+        this.bioPic = videoData['bioPic'];                              // path the bio avatar
+        this.bioCopy = videoData['bioCopy'];                            // biography text/html string
+        this.interviewee = videoData['interviewee'];                    // name of interviewee
+        this.interviewer = videoData['interviewer'];                    // who interviewed them
+        this.container = container;                                     // video container div
+        this.contentContainer = contentContainer;                       // content container div
+        this.videoEl = container.querySelector('.video-loop');          // <video> element
 
         if (videoData['videoUrl']) {
             this.videoUrl = videoData['videoUrl'];
@@ -21,16 +22,18 @@ var Slide = function() {
 
 
     Slide.prototype.cycleIn = function() {              // start this slide
-        // set up the video
+        // if there is a video, play it
         if (this.videoUrl) {
-            this.videoEl.src = this.videoUrl;                  // if there is a video, play it
+            this.videoEl.src = this.videoUrl;
+            this.videoEl.style.opacity = '.7';
+            this.videoEl.style.width = '100%';
             this.videoEl.play();
         } else {
-            console.log("poster");
-            console.log(this.container);
-            this.videoEl.removeAttribute('src');               // else, display the poster
-            //this.videoEl.duration = 45;
-            this.videoEl.poster = this.posterUrl;
+            // else, display the poster & play the filler
+            this.videoEl.src = this.fillerUrl;
+            this.videoEl.style.opacity = '.2';
+            this.videoEl.style.width = 'auto';
+            this.videoEl.play();
         }
 
         // set up the header
@@ -55,6 +58,9 @@ var Slide = function() {
 
         // set the bio picture
         header.querySelector('.bio__pic').src = this.bioPic;
+
+        // set the bio title
+        header.querySelector('.bio__title').innerHTML = this.interviewee;
 
         // set the bio copy
         header.querySelector('.bio__copy').innerHTML = this.bioCopy;

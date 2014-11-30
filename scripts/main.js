@@ -19,8 +19,8 @@ var controller = {
         skipBtn = document.querySelector('[rel="js-skip-intro"'),
         introContainer = document.querySelector('.intro-container');
 
-    this.mainLoop.videoContainer = document.querySelector('.video-container');
-    this.mainLoop.contentContainer = document.querySelector('.content-container');
+    self.mainLoop.videoContainer = document.querySelector('.video-container');
+    self.mainLoop.contentContainer = document.querySelector('.content-container');
 
     // START THE INTRO
     self.introLoader.init(introContainer, introVid, introProgress, skipBtn);

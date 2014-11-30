@@ -73,7 +73,7 @@ var introLoader = {
             videoModule.loaderStart(container);
         });
 
-        video.addEventListener('canplay', function () {
+        video.addEventListener('loadeddata', function () {
             videoModule.loaderEnd(container);
         });
 
@@ -125,8 +125,8 @@ var controller = {
         skipBtn = document.querySelector('[rel="js-skip-intro"'),
         introContainer = document.querySelector('.intro-container');
 
-    this.mainLoop.videoContainer = document.querySelector('.video-container');
-    this.mainLoop.contentContainer = document.querySelector('.content-container');
+    self.mainLoop.videoContainer = document.querySelector('.video-container');
+    self.mainLoop.contentContainer = document.querySelector('.content-container');
 
     // START THE INTRO
     self.introLoader.init(introContainer, introVid, introProgress, skipBtn);
@@ -162,24 +162,10 @@ var loop = {
         // display the video
         self.videoContainer.style.display = "block";
 
-        // loader animation
-        video.addEventListener('progress', function () {
-            videoModule.loaderStart(self.videoContainer);
-        });
+        // display the content
+        self.contentContainer.style.display = "block";
 
-        video.addEventListener('canplay', function () {
-            videoModule.loaderEnd(self.videoContainer);
-        });
-
-        // progress bar length corresponds to timeupdate function
-        video.addEventListener('timeupdate', function() {
-            videoModule.progressBar(video, progressBar);
-        });
-
-        // once the video has ended, loop to the next one
-        video.addEventListener('ended', function() {
-            self.next();
-        });
+        self.initEvents(video, progressBar);
 
         // get the video data. When loaded, create the slides
         dataLoader.getData(self.createSlides.bind(this));
@@ -198,6 +184,30 @@ var loop = {
 
         // start looping
         this.startLoop();
+    },
+    'initEvents': function(video, progressBar) {
+        // loader animation
+        var self = this;
+
+        video.addEventListener('loadstart', function () {
+            videoModule.loaderStart(self.videoContainer);
+            console.log("loader started");
+        });
+
+        video.addEventListener('loadeddata', function () {
+            videoModule.loaderEnd(self.videoContainer);
+            console.log("loader ended");
+        });
+
+        // progress bar length corresponds to timeupdate function
+        video.addEventListener('timeupdate', function() {
+            videoModule.progressBar(video, progressBar);
+        });
+
+        // once the video has ended, loop to the next one
+        video.addEventListener('ended', function() {
+            self.next();
+        });
     },
     'startLoop': function() {
         // set the currentSlide to the beginning
@@ -236,14 +246,15 @@ var videoModule = require('./video.js');
 
 var Slide = function() {
     var Slide = function(videoData, container, contentContainer) {           // videoData is JSON object
-        this.posterUrl = videoData['posterUrl'];
-        this.bioPic = videoData['bioPic'];
-        this.bioCopy = videoData['bioCopy'];
-        this.interviewee = videoData['interviewee'];
-        this.interviewer = videoData['interviewer'];
-        this.container = container;
-        this.contentContainer = contentContainer;
-        this.videoEl = container.querySelector('.video-loop');
+        this.fillerUrl = "assets/videos/filler.mp4";                    // path to filler video
+        this.posterUrl = videoData['posterUrl'];                        // path to poster URL
+        this.bioPic = videoData['bioPic'];                              // path the bio avatar
+        this.bioCopy = videoData['bioCopy'];                            // biography text/html string
+        this.interviewee = videoData['interviewee'];                    // name of interviewee
+        this.interviewer = videoData['interviewer'];                    // who interviewed them
+        this.container = container;                                     // video container div
+        this.contentContainer = contentContainer;                       // content container div
+        this.videoEl = container.querySelector('.video-loop');          // <video> element
 
         if (videoData['videoUrl']) {
             this.videoUrl = videoData['videoUrl'];
@@ -252,16 +263,18 @@ var Slide = function() {
 
 
     Slide.prototype.cycleIn = function() {              // start this slide
-        // set up the video
+        // if there is a video, play it
         if (this.videoUrl) {
-            this.videoEl.src = this.videoUrl;                  // if there is a video, play it
+            this.videoEl.src = this.videoUrl;
+            this.videoEl.style.opacity = '.7';
+            this.videoEl.style.width = '100%';
             this.videoEl.play();
         } else {
-            console.log("poster");
-            console.log(this.container);
-            this.videoEl.removeAttribute('src');               // else, display the poster
-            //this.videoEl.duration = 45;
-            this.videoEl.poster = this.posterUrl;
+            // else, display the poster & play the filler
+            this.videoEl.src = this.fillerUrl;
+            this.videoEl.style.opacity = '.2';
+            this.videoEl.style.width = 'auto';
+            this.videoEl.play();
         }
 
         // set up the header
@@ -286,6 +299,9 @@ var Slide = function() {
 
         // set the bio picture
         header.querySelector('.bio__pic').src = this.bioPic;
+
+        // set the bio title
+        header.querySelector('.bio__title').innerHTML = this.interviewee;
 
         // set the bio copy
         header.querySelector('.bio__copy').innerHTML = this.bioCopy;
@@ -319,7 +335,6 @@ var video = {
         // fill it with the loader SVG
         loader.innerHTML = '<svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"width="80px" height="80px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve"><path fill="#000" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z"> <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"/></path></svg>';
         root.appendChild(loader);
-        console.log(loader);
     },
     'loaderEnd': function(root) {
         var loader = root.querySelector('.loader');
@@ -329,7 +344,10 @@ var video = {
 
         // remove it from the DOM
         // FIX: FIRES TOO SOON
-        // root.removeChild(loader);
+        setTimeout(function() {
+            root.removeChild(loader);
+            console.log('loader removed');
+        }, 500);
     }
 };
 
