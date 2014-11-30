@@ -73,18 +73,29 @@ var loop = {
         this.next();
     },
     'next': function(target) {
-        console.log(this.currentSlide);
-
         // once at the end, wrap around to loop
         if (this.currentSlide > this.slides.length-1) {
             this.currentSlide = 0;
         }
 
-        if (target) {                               // if navigating to a specific slide  TO DO: check for typeof number
+        // if navigating to a specific slide
+        if (target) {
+            // cycle in the target
             this.slides[target].cycleIn();
+
             // set current slide to the target
             this.currentSlide = this.slides[target];
-        } else {                                        // else, go to the next slide
+        } else {
+            // cycle the prev slide out
+            if (this.currentSlide == 0) {
+                // if at the beginning, cycle the last slide out
+                this.slides[this.slides.length-1].cycleOut();
+            } else {
+                // else, cycle out the previous one
+                this.slides[this.currentSlide-1].cycleOut();
+            }
+
+            // cycle the next one in
             this.slides[this.currentSlide].cycleIn();
         }
 

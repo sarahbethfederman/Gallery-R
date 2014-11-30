@@ -29,7 +29,7 @@ var Slide = function() {
             this.videoEl.style.width = '100%';
             this.videoEl.play();
         } else {
-            // else, display the poster & play the filler
+            // else, dim and play the filler
             this.videoEl.src = this.fillerUrl;
             this.videoEl.style.opacity = '.2';
             this.videoEl.style.width = 'auto';
@@ -41,8 +41,6 @@ var Slide = function() {
     };
 
     Slide.prototype.cycleOut = function(callback) {     // end & move this slide out
-        // stop the video
-
         // remove the header
 
         // animate everything out
@@ -57,7 +55,18 @@ var Slide = function() {
         var header = this.contentContainer.querySelector('header');
 
         // set the bio picture
-        header.querySelector('.bio__pic').src = this.bioPic;
+        if (this.bioPic) {
+            header.querySelector('.bio__pic').classList.remove('hide');
+            header.querySelector('.bio__pic').classList.add('fade-in');
+            header.querySelector('.bio__pic').src = this.bioPic;
+
+            console.log(header.querySelector('.bio__pic'));
+        } else {
+            header.querySelector('.bio__pic').classList.remove('fade-in');
+            header.querySelector('.bio__pic').classList.add('hide');
+
+            console.log(header.querySelector('.bio__pic'));
+        }
 
         // set the bio title
         header.querySelector('.bio__title').innerHTML = this.interviewee;

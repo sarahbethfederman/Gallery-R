@@ -4,11 +4,12 @@
  * uses Browserify for requiring modules (instead of requireJS like on the last project)
  */
 
-var controller = {
+var main = {
   'dataLoader': require('./dataLoader.js'),
   'buttons': require('./buttons.js'),
   'introLoader': require('./introLoader.js'),
   'mainLoop': require('./mainLoop.js'),
+  'slideNav': require('./slideNav.js'),
   'init': function() {
     console.log("inited!");
     var self = this;
@@ -19,6 +20,7 @@ var controller = {
         skipBtn = document.querySelector('[rel="js-skip-intro"'),
         introContainer = document.querySelector('.intro-container');
 
+    self.slideNav.navContainer = document.querySelector('slide-container');
     self.mainLoop.videoContainer = document.querySelector('.video-container');
     self.mainLoop.contentContainer = document.querySelector('.content-container');
 
@@ -32,5 +34,5 @@ var controller = {
 
 // init on document ready
 document.addEventListener("DOMContentLoaded", function(event) {
-  controller.init();
+  main.init();
 });

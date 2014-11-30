@@ -110,11 +110,12 @@ module.exports = introLoader;
  * uses Browserify for requiring modules (instead of requireJS like on the last project)
  */
 
-var controller = {
+var main = {
   'dataLoader': require('./dataLoader.js'),
   'buttons': require('./buttons.js'),
   'introLoader': require('./introLoader.js'),
   'mainLoop': require('./mainLoop.js'),
+  'slideNav': require('./slideNav.js'),
   'init': function() {
     console.log("inited!");
     var self = this;
@@ -125,6 +126,7 @@ var controller = {
         skipBtn = document.querySelector('[rel="js-skip-intro"'),
         introContainer = document.querySelector('.intro-container');
 
+    self.slideNav.navContainer = document.querySelector('slide-container');
     self.mainLoop.videoContainer = document.querySelector('.video-container');
     self.mainLoop.contentContainer = document.querySelector('.content-container');
 
@@ -138,10 +140,10 @@ var controller = {
 
 // init on document ready
 document.addEventListener("DOMContentLoaded", function(event) {
-  controller.init();
+  main.init();
 });
 
-},{"./buttons.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/buttons.js","./dataLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/dataLoader.js","./introLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/introLoader.js","./mainLoop.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/mainLoop.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/mainLoop.js":[function(require,module,exports){
+},{"./buttons.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/buttons.js","./dataLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/dataLoader.js","./introLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/introLoader.js","./mainLoop.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/mainLoop.js","./slideNav.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slideNav.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/mainLoop.js":[function(require,module,exports){
 // Main loop
 
 var Slide = require('./slide.js');  // Slide module
@@ -217,18 +219,29 @@ var loop = {
         this.next();
     },
     'next': function(target) {
-        console.log(this.currentSlide);
-
         // once at the end, wrap around to loop
         if (this.currentSlide > this.slides.length-1) {
             this.currentSlide = 0;
         }
 
-        if (target) {                               // if navigating to a specific slide  TO DO: check for typeof number
+        // if navigating to a specific slide
+        if (target) {
+            // cycle in the target
             this.slides[target].cycleIn();
+
             // set current slide to the target
             this.currentSlide = this.slides[target];
-        } else {                                        // else, go to the next slide
+        } else {
+            // cycle the prev slide out
+            if (this.currentSlide == 0) {
+                // if at the beginning, cycle the last slide out
+                this.slides[this.slides.length-1].cycleOut();
+            } else {
+                // else, cycle out the previous one
+                this.slides[this.currentSlide-1].cycleOut();
+            }
+
+            // cycle the next one in
             this.slides[this.currentSlide].cycleIn();
         }
 
@@ -270,7 +283,7 @@ var Slide = function() {
             this.videoEl.style.width = '100%';
             this.videoEl.play();
         } else {
-            // else, display the poster & play the filler
+            // else, dim and play the filler
             this.videoEl.src = this.fillerUrl;
             this.videoEl.style.opacity = '.2';
             this.videoEl.style.width = 'auto';
@@ -282,8 +295,6 @@ var Slide = function() {
     };
 
     Slide.prototype.cycleOut = function(callback) {     // end & move this slide out
-        // stop the video
-
         // remove the header
 
         // animate everything out
@@ -298,7 +309,18 @@ var Slide = function() {
         var header = this.contentContainer.querySelector('header');
 
         // set the bio picture
-        header.querySelector('.bio__pic').src = this.bioPic;
+        if (this.bioPic) {
+            header.querySelector('.bio__pic').classList.remove('hide');
+            header.querySelector('.bio__pic').classList.add('fade-in');
+            header.querySelector('.bio__pic').src = this.bioPic;
+
+            console.log(header.querySelector('.bio__pic'));
+        } else {
+            header.querySelector('.bio__pic').classList.remove('fade-in');
+            header.querySelector('.bio__pic').classList.add('hide');
+
+            console.log(header.querySelector('.bio__pic'));
+        }
 
         // set the bio title
         header.querySelector('.bio__title').innerHTML = this.interviewee;
@@ -312,7 +334,28 @@ var Slide = function() {
 
 
 module.exports = Slide;
-},{"./buttons.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/buttons.js","./video.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/video.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/video.js":[function(require,module,exports){
+},{"./buttons.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/buttons.js","./video.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/video.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slideNav.js":[function(require,module,exports){
+/**
+ * Created by Sarah on 11/29/14.
+ */
+
+var slideNav = {
+    'names': [],
+    'navContainer': undefined,
+    'init': function(data) {
+       for (key in data) {
+           if (data.hasOwnProperty(key)) {
+               this.names.push(key);
+           }
+       }
+    },
+    'move': function(offset) {
+
+    }
+};
+
+module.exports = slideNav;
+},{}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/video.js":[function(require,module,exports){
 /**
  * Collection of video events
  * Created by Sarah on 11/28/14.
