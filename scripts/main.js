@@ -30,7 +30,7 @@ var controller = {
   }
 };
 
-
+// init on document ready
 document.addEventListener("DOMContentLoaded", function(event) {
   controller.init();
 });

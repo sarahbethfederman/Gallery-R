@@ -1,0 +1,13 @@
+.bio {  // header
+  width: 80%;
+  &__pic {
+    width: 80px;
+    height: 80px;
+    opacity: .8;
+    float: left;
+  }
+  &__copy {
+    width: 100%;
+    line-height: .4rem;
+  }
+}

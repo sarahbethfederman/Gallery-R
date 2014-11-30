@@ -1,16 +1,32 @@
 {
   "videos": {
-    "0": {
-      "videoUrl": "http://URLGOESHERE",
-      "interviewee": "Name of Interviewee",
+    "Joan Stone": {
+      "posterUrl": "http://URLGOESHERE.png",
+      "interviewee": "Joan Stone",
       "interviewer": "Name of Interviewer",
-      "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin dapibus, odio eu tempus suscipit, augue purus bibendum quam, sed commodo nisl eros in ipsum. Cras at interdum est. Quisque non lectus sem. Aliquam vehicula pellentesque nisl ut convallis. Mauris tincidunt convallis hendrerit. Curabitur condimentum eu arcu vestibulum facilisis. Ut non sapien ut est tristique lobortis facilisis ac urna. Duis sit amet hendrerit quam. Suspendisse et ligula nec sapien lacinia commodo. Donec eget vulputate sem. Vestibulum fermentum, nulla sit amet viverra maximus, lacus enim gravida urna, at euismod velit nibh sit amet dui. Vestibulum sit amet quam congue, viverra tortor ac, sollicitudin dui. Maecenas dapibus ipsum ut mauris hendrerit, eu porta justo blandit."
+      "bioCopy": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin dapibus, odio eu tempus suscipit, augue purus bibendum quam, sed commodo nisl eros in ipsum. Cras at interdum est. Quisque non lectus sem. Aliquam vehicula pellentesque nisl ut convallis. Mauris tincidunt convallis hendrerit. Curabitur condimentum eu arcu vestibulum facilisis. Ut non sapien ut est tristique lobortis facilisis ac urna. Duis sit amet hendrerit quam. Suspendisse et ligula nec sapien lacinia commodo. Donec eget vulputate sem. Vestibulum fermentum, nulla sit amet viverra maximus, lacus enim gravida urna, at euismod velit nibh sit amet dui. Vestibulum sit amet quam congue, viverra tortor ac, sollicitudin dui. Maecenas dapibus ipsum ut mauris hendrerit, eu porta justo blandit."
     },
-    "1": {
-      "videoUrl": "http://URLGOESHERE",
+    "Edith Lawson": {
+      "videoUrl": "http://URLGOESHERE.mp4",
+      "posterUrl": "http://URLGOESHERE.png",
+      "interviewee": "Edith Lawson",
+      "interviewer": "Name of Interviewer",
+      "bioPic": "http://URLGOESHERE.png",
+      "bioCopy": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin dapibus, odio eu tempus suscipit, augue purus bibendum quam, sed commodo nisl eros in ipsum. Cras at interdum est. Quisque non lectus sem. Aliquam vehicula pellentesque nisl ut convallis. Mauris tincidunt convallis hendrerit. Curabitur condimentum eu arcu vestibulum facilisis. Ut non sapien ut est tristique lobortis facilisis ac urna. Duis sit amet hendrerit quam. Suspendisse et ligula nec sapien lacinia commodo. Donec eget vulputate sem. Vestibulum fermentum, nulla sit amet viverra maximus, lacus enim gravida urna, at euismod velit nibh sit amet dui. Vestibulum sit amet quam congue, viverra tortor ac, sollicitudin dui. Maecenas dapibus ipsum ut mauris hendrerit, eu porta justo blandit."
+    },
+    "Malcolm Spaull": {
+      "videoUrl": "http://URLGOESHERE.mp4",
+      "interviewee": "Malcolm Spaull",
+      "interviewer": "Name of Interviewer",
+      "bioPic": "http://URLGOESHERE.png",
+      "bioCopy": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin dapibus, odio eu tempus suscipit, augue purus bibendum quam, sed commodo nisl eros in ipsum. Cras at interdum est. Quisque non lectus sem. Aliquam vehicula pellentesque nisl ut convallis. Mauris tincidunt convallis hendrerit. Curabitur condimentum eu arcu vestibulum facilisis. Ut non sapien ut est tristique lobortis facilisis ac urna. Duis sit amet hendrerit quam. Suspendisse et ligula nec sapien lacinia commodo. Donec eget vulputate sem. Vestibulum fermentum, nulla sit amet viverra maximus, lacus enim gravida urna, at euismod velit nibh sit amet dui. Vestibulum sit amet quam congue, viverra tortor ac, sollicitudin dui. Maecenas dapibus ipsum ut mauris hendrerit, eu porta justo blandit."
+    },
+    "3": {
+      "videoUrl": "http://URLGOESHERE.mp4",
       "interviewee": "Name of Interviewee",
       "interviewer": "Name of Interviewer",
-      "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin dapibus, odio eu tempus suscipit, augue purus bibendum quam, sed commodo nisl eros in ipsum. Cras at interdum est. Quisque non lectus sem. Aliquam vehicula pellentesque nisl ut convallis. Mauris tincidunt convallis hendrerit. Curabitur condimentum eu arcu vestibulum facilisis. Ut non sapien ut est tristique lobortis facilisis ac urna. Duis sit amet hendrerit quam. Suspendisse et ligula nec sapien lacinia commodo. Donec eget vulputate sem. Vestibulum fermentum, nulla sit amet viverra maximus, lacus enim gravida urna, at euismod velit nibh sit amet dui. Vestibulum sit amet quam congue, viverra tortor ac, sollicitudin dui. Maecenas dapibus ipsum ut mauris hendrerit, eu porta justo blandit."
+      "bioPic": "http://URLGOESHERE.png",
+      "bioCopy": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin dapibus, odio eu tempus suscipit, augue purus bibendum quam, sed commodo nisl eros in ipsum. Cras at interdum est. Quisque non lectus sem. Aliquam vehicula pellentesque nisl ut convallis. Mauris tincidunt convallis hendrerit. Curabitur condimentum eu arcu vestibulum facilisis. Ut non sapien ut est tristique lobortis facilisis ac urna. Duis sit amet hendrerit quam. Suspendisse et ligula nec sapien lacinia commodo. Donec eget vulputate sem. Vestibulum fermentum, nulla sit amet viverra maximus, lacus enim gravida urna, at euismod velit nibh sit amet dui. Vestibulum sit amet quam congue, viverra tortor ac, sollicitudin dui. Maecenas dapibus ipsum ut mauris hendrerit, eu porta justo blandit."
     }
   }
 }

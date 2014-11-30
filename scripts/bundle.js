@@ -136,7 +136,7 @@ var controller = {
   }
 };
 
-
+// init on document ready
 document.addEventListener("DOMContentLoaded", function(event) {
   controller.init();
 });
@@ -188,9 +188,12 @@ var loop = {
         this.videoData = vidData;
 
         // create a slide for each video
-        for (var i = 0; i < this.videoData.length; i++) {
-            var slide = new Slide(this.videoData[i], this.videoContainer, this.contentContainer);
-            this.slides.push(slide);
+        for (video in this.videoData) {
+            if (this.videoData.hasOwnProperty(video)) {
+                var slide = new Slide(this.videoData[video], this.videoContainer, this.contentContainer);
+                slide.key = video;  // store the access key as the json object name
+                this.slides.push(slide);
+            }
         }
 
         // start looping
@@ -214,7 +217,7 @@ var loop = {
         if (target) {                               // if navigating to a specific slide  TO DO: check for typeof number
             this.slides[target].cycleIn();
             // set current slide to the target
-            //this.currentSlide = this.slides[target];
+            this.currentSlide = this.slides[target];
         } else {                                        // else, go to the next slide
             this.slides[this.currentSlide].cycleIn();
         }
@@ -236,10 +239,11 @@ var Slide = function() {
         this.posterUrl = videoData['posterUrl'];
         this.bioPic = videoData['bioPic'];
         this.bioCopy = videoData['bioCopy'];
+        this.interviewee = videoData['interviewee'];
+        this.interviewer = videoData['interviewer'];
         this.container = container;
         this.contentContainer = contentContainer;
         this.videoEl = container.querySelector('.video-loop');
-        console.log(videoData);
 
         if (videoData['videoUrl']) {
             this.videoUrl = videoData['videoUrl'];
@@ -253,6 +257,8 @@ var Slide = function() {
             this.videoEl.src = this.videoUrl;                  // if there is a video, play it
             this.videoEl.play();
         } else {
+            console.log("poster");
+            console.log(this.container);
             this.videoEl.removeAttribute('src');               // else, display the poster
             //this.videoEl.duration = 45;
             this.videoEl.poster = this.posterUrl;
@@ -279,10 +285,10 @@ var Slide = function() {
         var header = this.contentContainer.querySelector('header');
 
         // set the bio picture
-        //header.querySelector('.bio__pic').src = this.bioPic;
+        header.querySelector('.bio__pic').src = this.bioPic;
 
         // set the bio copy
-       // header.querySelector('.bio__copy').innerHTML = this.bioCopy;
+        header.querySelector('.bio__copy').innerHTML = this.bioCopy;
     }
 
     return Slide;

@@ -44,9 +44,12 @@ var loop = {
         this.videoData = vidData;
 
         // create a slide for each video
-        for (var i = 0; i < this.videoData.length; i++) {
-            var slide = new Slide(this.videoData[i], this.videoContainer, this.contentContainer);
-            this.slides.push(slide);
+        for (video in this.videoData) {
+            if (this.videoData.hasOwnProperty(video)) {
+                var slide = new Slide(this.videoData[video], this.videoContainer, this.contentContainer);
+                slide.key = video;  // store the access key as the json object name
+                this.slides.push(slide);
+            }
         }
 
         // start looping
@@ -70,7 +73,7 @@ var loop = {
         if (target) {                               // if navigating to a specific slide  TO DO: check for typeof number
             this.slides[target].cycleIn();
             // set current slide to the target
-            //this.currentSlide = this.slides[target];
+            this.currentSlide = this.slides[target];
         } else {                                        // else, go to the next slide
             this.slides[this.currentSlide].cycleIn();
         }

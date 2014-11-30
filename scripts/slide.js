@@ -8,10 +8,11 @@ var Slide = function() {
         this.posterUrl = videoData['posterUrl'];
         this.bioPic = videoData['bioPic'];
         this.bioCopy = videoData['bioCopy'];
+        this.interviewee = videoData['interviewee'];
+        this.interviewer = videoData['interviewer'];
         this.container = container;
         this.contentContainer = contentContainer;
         this.videoEl = container.querySelector('.video-loop');
-        console.log(videoData);
 
         if (videoData['videoUrl']) {
             this.videoUrl = videoData['videoUrl'];
@@ -25,6 +26,8 @@ var Slide = function() {
             this.videoEl.src = this.videoUrl;                  // if there is a video, play it
             this.videoEl.play();
         } else {
+            console.log("poster");
+            console.log(this.container);
             this.videoEl.removeAttribute('src');               // else, display the poster
             //this.videoEl.duration = 45;
             this.videoEl.poster = this.posterUrl;
@@ -51,10 +54,10 @@ var Slide = function() {
         var header = this.contentContainer.querySelector('header');
 
         // set the bio picture
-        //header.querySelector('.bio__pic').src = this.bioPic;
+        header.querySelector('.bio__pic').src = this.bioPic;
 
         // set the bio copy
-       // header.querySelector('.bio__copy').innerHTML = this.bioCopy;
+        header.querySelector('.bio__copy').innerHTML = this.bioCopy;
     }
 
     return Slide;
