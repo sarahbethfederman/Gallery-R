@@ -10,6 +10,14 @@
 .content-container {
   display: none;    // hide content overlay on load
   float: left;
+  padding: 60px;
+  opacity: .8;
+}
+
+.video-controls {
+  position: absolute;
+  bottom: 30px;
+  left: 40px;
 }
 
 .video-container {
@@ -19,4 +27,6 @@
   height: 100%;
   background-color: #000;
   z-index: -1;
+  left: 0;
+  top:0;
 }

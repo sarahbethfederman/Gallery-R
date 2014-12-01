@@ -1,11 +1,51 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/buttons.js":[function(require,module,exports){
+"use strict";
 
 var buttons = {
     'makeButton': function(button, clickEvent) {
         button.addEventListener('click', clickEvent);
     },
-    'initVidBtns': function() {
+    'initVidBtns': function(container, video) {
+        var playPauseBtn = container.querySelector('#play-pause');
+        this.makeButton(playPauseBtn, function() {
+           // if the video is paused, play it
+           if (video.paused) {
+              video.play();
 
+               // Update the button text to 'Pause'
+               playPauseBtn.innerHTML = "Pause";
+           } else {
+               video.pause();
+
+               // Update the button text to 'Play'
+               playPauseBtn.innerHTML = "Play";
+           }
+        });
+
+        var muteButton = container.querySelector("#mute");
+
+        this.makeButton(muteButton, function() {
+            // if not muted, mute the video
+            if (!video.muted) {
+                video.muted = true;
+
+                // Update the button text
+                muteButton.innerHTML = "Unmute";
+            } else {
+                // Unmute the video
+                video.muted = false;
+
+                // Update the button text
+                muteButton.innerHTML = "Mute";
+            }
+        });
+
+        var volumeBar = container.querySelector("#volume-bar");
+
+        volumeBar.addEventListener("change", function() {
+            // Update the video volume
+            video.volume = volumeBar.value;
+        });
     }
 };
 
@@ -54,6 +94,7 @@ module.exports = dataLoader;
 
 },{"firebase":"/Users/Sarah/node_modules/firebase/lib/firebase-web.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/introLoader.js":[function(require,module,exports){
 // Loads the intro sequence
+"use strict";
 
 var mainLoop = require('./mainLoop.js');
 var buttons = require('./buttons.js');
@@ -109,6 +150,7 @@ module.exports = introLoader;
  * Main js file
  * uses Browserify for requiring modules (instead of requireJS like on the last project)
  */
+"use strict";
 
 var main = {
   'dataLoader': require('./dataLoader.js'),
@@ -126,7 +168,7 @@ var main = {
         skipBtn = document.querySelector('[rel="js-skip-intro"'),
         introContainer = document.querySelector('.intro-container');
 
-    self.slideNav.navContainer = document.querySelector('slide-container');
+    self.slideNav.navContainer = document.querySelector('.slide-container');
     self.mainLoop.videoContainer = document.querySelector('.video-container');
     self.mainLoop.contentContainer = document.querySelector('.content-container');
 
@@ -145,10 +187,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 },{"./buttons.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/buttons.js","./dataLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/dataLoader.js","./introLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/introLoader.js","./mainLoop.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/mainLoop.js","./slideNav.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slideNav.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/mainLoop.js":[function(require,module,exports){
 // Main loop
+"use strict";
 
 var Slide = require('./slide.js');  // Slide module
 var dataLoader = require('./dataLoader.js');
 var videoModule = require('./video.js');
+var buttons = require('./buttons.js');
+var slideNav = require('./slideNav.js');
 
 var loop = {
     'videoData': undefined,
@@ -176,7 +221,7 @@ var loop = {
         this.videoData = vidData;
 
         // create a slide for each video
-        for (video in this.videoData) {
+        for (var video in this.videoData) {
             if (this.videoData.hasOwnProperty(video)) {
                 var slide = new Slide(this.videoData[video], this.videoContainer, this.contentContainer);
                 slide.key = video;  // store the access key as the json object name
@@ -188,7 +233,7 @@ var loop = {
         this.startLoop();
     },
     'initEvents': function(video, progressBar) {
-        // loader animation
+        // LOADER ANIMATION
         var self = this;
 
         video.addEventListener('loadstart', function () {
@@ -210,6 +255,9 @@ var loop = {
         video.addEventListener('ended', function() {
             self.next();
         });
+
+        // INIT VIDEO CONTROLS
+        buttons.initVidBtns(this.contentContainer.querySelector('.video-controls'), video);
     },
     'startLoop': function() {
         // set the currentSlide to the beginning
@@ -217,6 +265,10 @@ var loop = {
 
         // cycle the current slide in
         this.next();
+
+
+        // init the slideNav
+        slideNav.init(this.videoData);
     },
     'next': function(target) {
         // once at the end, wrap around to loop
@@ -251,8 +303,9 @@ var loop = {
 };
 
 module.exports = loop;
-},{"./dataLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/dataLoader.js","./slide.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slide.js","./video.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/video.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slide.js":[function(require,module,exports){
+},{"./buttons.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/buttons.js","./dataLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/dataLoader.js","./slide.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slide.js","./slideNav.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slideNav.js","./video.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/video.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slide.js":[function(require,module,exports){
 // slide module
+"use strict";
 
 var buttonModule = require('./buttons.js');
 var videoModule = require('./video.js');
@@ -281,13 +334,16 @@ var Slide = function() {
             this.videoEl.src = this.videoUrl;
             this.videoEl.style.opacity = '.7';
             this.videoEl.style.width = '100%';
+            this.videoEl.classList.add('blur');
             this.videoEl.play();
         } else {
             // else, dim and play the filler
             this.videoEl.src = this.fillerUrl;
             this.videoEl.style.opacity = '.2';
             this.videoEl.style.width = 'auto';
+            this.videoEl.classList.add('blur');
             this.videoEl.play();
+
         }
 
         // set up the header
@@ -314,12 +370,9 @@ var Slide = function() {
             header.querySelector('.bio__pic').classList.add('fade-in');
             header.querySelector('.bio__pic').src = this.bioPic;
 
-            console.log(header.querySelector('.bio__pic'));
         } else {
             header.querySelector('.bio__pic').classList.remove('fade-in');
             header.querySelector('.bio__pic').classList.add('hide');
-
-            console.log(header.querySelector('.bio__pic'));
         }
 
         // set the bio title
@@ -327,7 +380,7 @@ var Slide = function() {
 
         // set the bio copy
         header.querySelector('.bio__copy').innerHTML = this.bioCopy;
-    }
+    };
 
     return Slide;
 }();
@@ -338,16 +391,28 @@ module.exports = Slide;
 /**
  * Created by Sarah on 11/29/14.
  */
+"use strict";
 
 var slideNav = {
     'names': [],
     'navContainer': undefined,
     'init': function(data) {
-       for (key in data) {
+        var self = this;
+
+        for (var key in data) {
            if (data.hasOwnProperty(key)) {
-               this.names.push(key);
+               self.names.push(key);
            }
-       }
+        }
+
+        self.names.forEach(function(element, index, array) {
+            var li = document.createElement("li");
+            li.classList.add('slide');
+            li.setAttribute("data-target-video", index);
+            li.innerHTML = array[index];
+
+            self.navContainer.appendChild(li);
+        });
     },
     'move': function(offset) {
 

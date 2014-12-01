@@ -3,6 +3,7 @@
  * Main js file
  * uses Browserify for requiring modules (instead of requireJS like on the last project)
  */
+"use strict";
 
 var main = {
   'dataLoader': require('./dataLoader.js'),
@@ -20,7 +21,7 @@ var main = {
         skipBtn = document.querySelector('[rel="js-skip-intro"'),
         introContainer = document.querySelector('.intro-container');
 
-    self.slideNav.navContainer = document.querySelector('slide-container');
+    self.slideNav.navContainer = document.querySelector('.slide-container');
     self.mainLoop.videoContainer = document.querySelector('.video-container');
     self.mainLoop.contentContainer = document.querySelector('.content-container');
 

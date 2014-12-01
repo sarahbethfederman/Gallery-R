@@ -1,4 +1,5 @@
 // Loads the intro sequence
+"use strict";
 
 var mainLoop = require('./mainLoop.js');
 var buttons = require('./buttons.js');

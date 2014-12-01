@@ -1,8 +1,11 @@
 // Main loop
+"use strict";
 
 var Slide = require('./slide.js');  // Slide module
 var dataLoader = require('./dataLoader.js');
 var videoModule = require('./video.js');
+var buttons = require('./buttons.js');
+var slideNav = require('./slideNav.js');
 
 var loop = {
     'videoData': undefined,
@@ -30,7 +33,7 @@ var loop = {
         this.videoData = vidData;
 
         // create a slide for each video
-        for (video in this.videoData) {
+        for (var video in this.videoData) {
             if (this.videoData.hasOwnProperty(video)) {
                 var slide = new Slide(this.videoData[video], this.videoContainer, this.contentContainer);
                 slide.key = video;  // store the access key as the json object name
@@ -42,7 +45,7 @@ var loop = {
         this.startLoop();
     },
     'initEvents': function(video, progressBar) {
-        // loader animation
+        // LOADER ANIMATION
         var self = this;
 
         video.addEventListener('loadstart', function () {
@@ -64,6 +67,9 @@ var loop = {
         video.addEventListener('ended', function() {
             self.next();
         });
+
+        // INIT VIDEO CONTROLS
+        buttons.initVidBtns(this.contentContainer.querySelector('.video-controls'), video);
     },
     'startLoop': function() {
         // set the currentSlide to the beginning
@@ -71,6 +77,10 @@ var loop = {
 
         // cycle the current slide in
         this.next();
+
+
+        // init the slideNav
+        slideNav.init(this.videoData);
     },
     'next': function(target) {
         // once at the end, wrap around to loop

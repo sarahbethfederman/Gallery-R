@@ -19,3 +19,12 @@ svg rect {
   display: none;
   opacity: 0;
 }
+
+.selected {
+  opacity: 1;
+}
+
+.blur {
+  -webkit-filter: blur(7px);
+  filter: blur(7px);
+}

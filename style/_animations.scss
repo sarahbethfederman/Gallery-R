@@ -48,3 +48,13 @@
   animation-duration: .3s;
   animation-fill-mode: forwards;
 }
+
+
+.fade-in-zoom {
+  -webkit-animation-name: fade-in-zoom;
+  -webkit-animation-duration: .3s;
+  -webkit-animation-fill-mode: forwards;
+  animation-name: fade-in-zoom;
+  animation-duration: .3s;
+  animation-fill-mode: forwards;
+}

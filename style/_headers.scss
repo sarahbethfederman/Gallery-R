@@ -1,5 +1,11 @@
 .bio {  // header
-  width: 50%;
+  width: 45%;
+  &__title {
+    font-weight: 100;
+    text-transform: uppercase;
+    letter-spacing: .4rem;
+    font-size: 1.3rem;
+  }
   &__pic {
     width: 100px;
     height: 100px;
@@ -7,11 +13,14 @@
     float: left;
     margin-bottom: 100%;
     margin-right: 20px;
-    border: 1px solid #fff;
+    border: 2px solid #ccc;
+    border-radius: 100%;
   }
   &__copy {
     width: 100%;
-    line-height: 1.5rem;
+    opacity: .9;
+    font-size: .9rem;
+    line-height: 1.7rem;
     font-weight: 100;
   }
 }

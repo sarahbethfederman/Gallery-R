@@ -1,4 +1,5 @@
 // slide module
+"use strict";
 
 var buttonModule = require('./buttons.js');
 var videoModule = require('./video.js');
@@ -27,13 +28,16 @@ var Slide = function() {
             this.videoEl.src = this.videoUrl;
             this.videoEl.style.opacity = '.7';
             this.videoEl.style.width = '100%';
+            this.videoEl.classList.add('blur');
             this.videoEl.play();
         } else {
             // else, dim and play the filler
             this.videoEl.src = this.fillerUrl;
             this.videoEl.style.opacity = '.2';
             this.videoEl.style.width = 'auto';
+            this.videoEl.classList.add('blur');
             this.videoEl.play();
+
         }
 
         // set up the header
@@ -60,12 +64,9 @@ var Slide = function() {
             header.querySelector('.bio__pic').classList.add('fade-in');
             header.querySelector('.bio__pic').src = this.bioPic;
 
-            console.log(header.querySelector('.bio__pic'));
         } else {
             header.querySelector('.bio__pic').classList.remove('fade-in');
             header.querySelector('.bio__pic').classList.add('hide');
-
-            console.log(header.querySelector('.bio__pic'));
         }
 
         // set the bio title
@@ -73,7 +74,7 @@ var Slide = function() {
 
         // set the bio copy
         header.querySelector('.bio__copy').innerHTML = this.bioCopy;
-    }
+    };
 
     return Slide;
 }();
