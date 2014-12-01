@@ -81,10 +81,8 @@ var dataLoader = {
 
         // if the data has already loaded, return it
         if (self.vidData) {
-            console.log("vidData exists");
             callback(self.vidData);
         } else {
-            console.log("vidData doesnt exist yet");
             self.loadData(callback);
         }
     }
@@ -202,12 +200,13 @@ var loop = {
     'videoContainer': undefined,
     'contentContainer': undefined,
     'video': undefined,
+    'overlayOn': false,
     'timer': undefined,
     'init': function() {
         var self = this,
             progressBar = self.videoContainer.querySelector('progress');
 
-        this.video = self.videoContainer.querySelector('video');
+        self.video = self.videoContainer.querySelector('video');
 
         // display the video
         self.videoContainer.classList.add('fade-in');
@@ -226,44 +225,58 @@ var loop = {
         var self = this,
             overlayOn = false;
 
-        function timer() {
-            console.log("timer started");
-
-            // if the mouse hasn't moved in 3.5 seconds, run this
-            self.timer = setTimeout(function() {
-                // if the content is showing
-                if (!overlayOn) {
-                    // fade the content out
-                    self.contentContainer.classList.remove('fade-in');
-                    self.contentContainer.classList.add('fade-out');
-                    self.video.classList.remove('blur');
-
-                    // the overlay is showing
-                    overlayOn = true;
-
-                    console.log("time finished");
-                    timer();
-                }
-            }, 3500);
-        }
+        // start the timer
+        self.startTimer();
 
         // reset the timers on every mouse move
         self.contentContainer.addEventListener('mousemove', function() {
-            clearTimeout(self.timer);
-
-            // blur the video
-            self.video.classList.add('blur');
-
-            // fade the content back in
-            self.contentContainer.classList.remove('fade-out');
-            self.contentContainer.classList.add('fade-in');
-
-            // the overlay is off
-            overlayOn = false;
-
-            timer();
-            console.log("timer cleared");
+            self.showOverlay();
         });
+    },
+    'startTimer': function() {
+        var self = this;
+
+        // if the mouse hasn't moved in 4 seconds
+        self.timer = setTimeout(function() {
+            // if the content is showing
+            if (self.overlayOn) {
+                // fade the content out
+                self.contentContainer.classList.remove('fade-in');
+                self.contentContainer.classList.add('fade-out');
+                self.video.classList.remove('blur');
+
+                // the overlay is off
+                self.overlayOn = false;
+
+                self.startTimer();
+            }
+        }, 4000);
+    },
+    'showOverlay': function() {
+        var self = this;
+
+        // clear the timer
+        clearTimeout(self.timer);
+
+        // blur the video
+        self.video.classList.add('blur');
+
+        // fade the content back in
+        self.contentContainer.classList.remove('fade-out');
+        self.contentContainer.classList.add('fade-in');
+
+        // the overlay is on
+        self.overlayOn = true;
+
+        //console.log(self.video, self.video.classList);
+        console.log("contains filler class", self.video.classList.contains('filler'));
+
+        // don't clear the overlay if it's a filler vid
+        if (!self.video.classList.contains('filler')) {
+            self.startTimer();
+        } else {
+            console.log("filler vid");
+        }
     },
     'createSlides': function(vidData) {
         this.videoData = vidData;
@@ -325,21 +338,15 @@ var loop = {
             self.currentSlide = 0;
         }
 
-        // blur the video
-        self.video.classList.add('blur');
-
-        // fade the content back in
-        self.contentContainer.classList.remove('fade-out');
-        self.contentContainer.classList.add('fade-in');
-
-        // clear the timer
-        clearTimeout(self.timer);
 
         // if navigating to a specific slide
         if (target) {
             // cycle in the target
             setTimeout(function() {
                 self.slides[target].cycleIn();
+
+                // show the overlay
+                self.showOverlay();
 
                 // iterate to next slide
                 self.currentSlide++;
@@ -360,6 +367,10 @@ var loop = {
             // cycle the next one in
             setTimeout(function() {
                 self.slides[self.currentSlide].cycleIn();
+
+
+                // show the overlay
+                self.showOverlay();
 
                 // iterate to next slide
                 self.currentSlide++;
@@ -397,13 +408,13 @@ var Slide = function() {
 
 
     Slide.prototype.cycleIn = function() {              // start this slide
-
         // set up the header
         this.createHeader();
 
-        //// animate stuff in
-        //this.contentContainer.classList.remove('fade-out');
-        //this.contentContainer.classList.add('fade-in');
+        // animate video in
+        this.container.classList.remove('fade-out');
+        this.container.classList.add('fade-in');
+
 
         // if there is a video, play it
         if (this.videoUrl) {
@@ -411,6 +422,7 @@ var Slide = function() {
             this.videoEl.style.opacity = '.7';
             this.videoEl.style.width = '100%';
             this.videoEl.classList.add('blur');
+            this.videoEl.classList.remove('filler');
             this.videoEl.play();
         } else {
             // else, dim and play the filler
@@ -418,15 +430,16 @@ var Slide = function() {
             this.videoEl.style.opacity = '.2';
             this.videoEl.style.width = 'auto';
             this.videoEl.classList.add('blur');
+            this.videoEl.classList.add('filler');
             this.videoEl.play();
         }
 
     };
 
     Slide.prototype.cycleOut = function(callback) {     // end & move this slide out
-        //// animate everything out
-        //this.contentContainer.classList.remove('fade-in');
-        //this.contentContainer.classList.add('fade-out');
+        // animate video out
+        this.container.classList.remove('fade-in');
+        this.container.classList.add('fade-out');
 
         // if there's a callback, execute it
         if (callback) {
@@ -435,6 +448,10 @@ var Slide = function() {
     };
 
     Slide.prototype.createHeader = function() {
+        // fade out the header
+        this.header.classList.remove('fade-in');
+        this.header.classList.add('fade-out');
+
         // set the bio picture
         if (this.bioPic) {
             this.header.querySelector('.bio__pic').classList.add('show');
@@ -450,6 +467,10 @@ var Slide = function() {
 
         // set the bio copy
         this.header.querySelector('.bio__copy').innerHTML = this.bioCopy;
+
+        // fade it back in w/ changes applied
+        this.header.classList.remove('fade-out');
+        this.header.classList.add('fade-in');
     };
 
     return Slide;

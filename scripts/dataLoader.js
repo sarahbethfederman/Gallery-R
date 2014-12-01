@@ -28,10 +28,8 @@ var dataLoader = {
 
         // if the data has already loaded, return it
         if (self.vidData) {
-            console.log("vidData exists");
             callback(self.vidData);
         } else {
-            console.log("vidData doesnt exist yet");
             self.loadData(callback);
         }
     }

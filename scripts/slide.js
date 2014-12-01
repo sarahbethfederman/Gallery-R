@@ -24,13 +24,13 @@ var Slide = function() {
 
 
     Slide.prototype.cycleIn = function() {              // start this slide
-
         // set up the header
         this.createHeader();
 
-        //// animate stuff in
-        //this.contentContainer.classList.remove('fade-out');
-        //this.contentContainer.classList.add('fade-in');
+        // animate video in
+        this.container.classList.remove('fade-out');
+        this.container.classList.add('fade-in');
+
 
         // if there is a video, play it
         if (this.videoUrl) {
@@ -38,6 +38,7 @@ var Slide = function() {
             this.videoEl.style.opacity = '.7';
             this.videoEl.style.width = '100%';
             this.videoEl.classList.add('blur');
+            this.videoEl.classList.remove('filler');
             this.videoEl.play();
         } else {
             // else, dim and play the filler
@@ -45,15 +46,16 @@ var Slide = function() {
             this.videoEl.style.opacity = '.2';
             this.videoEl.style.width = 'auto';
             this.videoEl.classList.add('blur');
+            this.videoEl.classList.add('filler');
             this.videoEl.play();
         }
 
     };
 
     Slide.prototype.cycleOut = function(callback) {     // end & move this slide out
-        //// animate everything out
-        //this.contentContainer.classList.remove('fade-in');
-        //this.contentContainer.classList.add('fade-out');
+        // animate video out
+        this.container.classList.remove('fade-in');
+        this.container.classList.add('fade-out');
 
         // if there's a callback, execute it
         if (callback) {
@@ -62,6 +64,10 @@ var Slide = function() {
     };
 
     Slide.prototype.createHeader = function() {
+        // fade out the header
+        this.header.classList.remove('fade-in');
+        this.header.classList.add('fade-out');
+
         // set the bio picture
         if (this.bioPic) {
             this.header.querySelector('.bio__pic').classList.add('show');
@@ -77,6 +83,10 @@ var Slide = function() {
 
         // set the bio copy
         this.header.querySelector('.bio__copy').innerHTML = this.bioCopy;
+
+        // fade it back in w/ changes applied
+        this.header.classList.remove('fade-out');
+        this.header.classList.add('fade-in');
     };
 
     return Slide;
