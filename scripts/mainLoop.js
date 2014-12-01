@@ -13,10 +13,13 @@ var loop = {
     'currentSlide': undefined,
     'videoContainer': undefined,
     'contentContainer': undefined,
+    'video': undefined,
+    'timer': undefined,
     'init': function() {
         var self = this,
-            video = self.videoContainer.querySelector('video'),
             progressBar = self.videoContainer.querySelector('progress');
+
+        this.video = self.videoContainer.querySelector('video');
 
         // display the video
         self.videoContainer.classList.add('fade-in');
@@ -25,7 +28,7 @@ var loop = {
         self.contentContainer.classList.add('fade-in');
 
         // init events
-        self.initEvents(video, progressBar);
+        self.initEvents(this.video, progressBar);
         self.mouseEffect();
 
         // get the video data. When loaded, create the slides
@@ -33,22 +36,44 @@ var loop = {
     },
     'mouseEffect': function() {
         var self = this,
-            t;
+            overlayOn = false;
 
-        (function timer() {
-            self.contentContainer.classList.add('fade-out');
+        function timer() {
+            console.log("timer started");
 
-            // start the timer
-            t = setTimeout(function() {
-                console.log("time finished");
-                timer();
-            }, 100);
-        })();
+            // if the mouse hasn't moved in 3.5 seconds, run this
+            self.timer = setTimeout(function() {
+                // if the content is showing
+                if (!overlayOn) {
+                    // fade the content out
+                    self.contentContainer.classList.remove('fade-in');
+                    self.contentContainer.classList.add('fade-out');
+                    self.video.classList.remove('blur');
 
+                    // the overlay is showing
+                    overlayOn = true;
+
+                    console.log("time finished");
+                    timer();
+                }
+            }, 3500);
+        }
 
         // reset the timers on every mouse move
         self.contentContainer.addEventListener('mousemove', function() {
-            clearTimeout(t);
+            clearTimeout(self.timer);
+
+            // blur the video
+            self.video.classList.add('blur');
+
+            // fade the content back in
+            self.contentContainer.classList.remove('fade-out');
+            self.contentContainer.classList.add('fade-in');
+
+            // the overlay is off
+            overlayOn = false;
+
+            timer();
             console.log("timer cleared");
         });
     },
@@ -101,7 +126,6 @@ var loop = {
         // cycle the current slide in
         this.next();
 
-
         // init the slideNav
         slideNav.init(this.videoData);
     },
@@ -112,6 +136,16 @@ var loop = {
         if (self.currentSlide > self.slides.length-1) {
             self.currentSlide = 0;
         }
+
+        // blur the video
+        self.video.classList.add('blur');
+
+        // fade the content back in
+        self.contentContainer.classList.remove('fade-out');
+        self.contentContainer.classList.add('fade-in');
+
+        // clear the timer
+        clearTimeout(self.timer);
 
         // if navigating to a specific slide
         if (target) {

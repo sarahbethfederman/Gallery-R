@@ -33,3 +33,8 @@ svg rect {
   -webkit-filter: blur(7px);
   filter: blur(7px);
 }
+
+.unblur {
+  -webkit-filter: blur(0);
+  filter: blur(0);
+}
