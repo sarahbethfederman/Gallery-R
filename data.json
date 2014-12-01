@@ -1,32 +1,64 @@
 {
-  "videos": {
-    "Joan Stone": {
-      "posterUrl": "http://URLGOESHERE.png",
-      "interviewee": "Joan Stone",
-      "interviewer": "Name of Interviewer",
-      "bioCopy": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin dapibus, odio eu tempus suscipit, augue purus bibendum quam, sed commodo nisl eros in ipsum. Cras at interdum est. Quisque non lectus sem. Aliquam vehicula pellentesque nisl ut convallis. Mauris tincidunt convallis hendrerit. Curabitur condimentum eu arcu vestibulum facilisis. Ut non sapien ut est tristique lobortis facilisis ac urna. Duis sit amet hendrerit quam. Suspendisse et ligula nec sapien lacinia commodo. Donec eget vulputate sem. Vestibulum fermentum, nulla sit amet viverra maximus, lacus enim gravida urna, at euismod velit nibh sit amet dui. Vestibulum sit amet quam congue, viverra tortor ac, sollicitudin dui. Maecenas dapibus ipsum ut mauris hendrerit, eu porta justo blandit."
+  "videos" : {
+    "Some Rando" : {
+      "bioCopy" : "HI Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin dapibus, odio eu tempus suscipit, augue purus bibendum quam, sed commodo nisl eros in ipsum. Cras at interdum est. Quisque non lectus sem. Aliquam vehicula pellentesque nisl ut convallis. Mauris tincidunt convallis hendrerit. Curabitur condimentum eu arcu vestibulum facilisis. Ut non sapien ut est tristique lobortis facilisis ac urna. Duis sit amet hendrerit quam. Suspendisse et ligula nec sapien lacinia commodo. Donec eget vulputate sem. Vestibulum fermentum, nulla sit amet viverra maximus, lacus enim gravida urna, at euismod velit nibh sit amet dui. Vestibulum sit amet quam congue, viverra tortor ac, sollicitudin dui. Maecenas dapibus ipsum ut mauris hendrerit, eu porta justo blandit.",
+      "interviewee" : "Name of Interviewee",
+      "interviewer" : "Name of Interviewer",
+      "videoUrl" : "assets/videos/1.mp4"
     },
-    "Edith Lawson": {
-      "videoUrl": "http://URLGOESHERE.mp4",
-      "posterUrl": "http://URLGOESHERE.png",
-      "interviewee": "Edith Lawson",
-      "interviewer": "Name of Interviewer",
-      "bioPic": "http://URLGOESHERE.png",
-      "bioCopy": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin dapibus, odio eu tempus suscipit, augue purus bibendum quam, sed commodo nisl eros in ipsum. Cras at interdum est. Quisque non lectus sem. Aliquam vehicula pellentesque nisl ut convallis. Mauris tincidunt convallis hendrerit. Curabitur condimentum eu arcu vestibulum facilisis. Ut non sapien ut est tristique lobortis facilisis ac urna. Duis sit amet hendrerit quam. Suspendisse et ligula nec sapien lacinia commodo. Donec eget vulputate sem. Vestibulum fermentum, nulla sit amet viverra maximus, lacus enim gravida urna, at euismod velit nibh sit amet dui. Vestibulum sit amet quam congue, viverra tortor ac, sollicitudin dui. Maecenas dapibus ipsum ut mauris hendrerit, eu porta justo blandit."
+    "Edith Lawson" : {
+      "bioCopy" : "HELLO Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin dapibus, odio eu tempus suscipit, augue purus bibendum quam, sed commodo nisl eros in ipsum. Cras at interdum est. Quisque non lectus sem. Aliquam vehicula pellentesque nisl ut convallis. Mauris tincidunt convallis hendrerit. Curabitur condimentum eu arcu vestibulum facilisis. Ut non sapien ut est tristique lobortis facilisis ac urna. Duis sit amet hendrerit quam. Suspendisse et ligula nec sapien lacinia commodo. Donec eget vulputate sem. Vestibulum fermentum, nulla sit amet viverra maximus, lacus enim gravida urna, at euismod velit nibh sit amet dui. Vestibulum sit amet quam congue, viverra tortor ac, sollicitudin dui. Maecenas dapibus ipsum ut mauris hendrerit, eu porta justo blandit.",
+      "interviewee" : "Edith Lawson",
+      "interviewer" : "Name of Interviewer",
+      "videoUrl" : "assets/videos/2.mp4"
     },
-    "Malcolm Spaull": {
-      "videoUrl": "http://URLGOESHERE.mp4",
-      "interviewee": "Malcolm Spaull",
-      "interviewer": "Name of Interviewer",
-      "bioPic": "http://URLGOESHERE.png",
-      "bioCopy": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin dapibus, odio eu tempus suscipit, augue purus bibendum quam, sed commodo nisl eros in ipsum. Cras at interdum est. Quisque non lectus sem. Aliquam vehicula pellentesque nisl ut convallis. Mauris tincidunt convallis hendrerit. Curabitur condimentum eu arcu vestibulum facilisis. Ut non sapien ut est tristique lobortis facilisis ac urna. Duis sit amet hendrerit quam. Suspendisse et ligula nec sapien lacinia commodo. Donec eget vulputate sem. Vestibulum fermentum, nulla sit amet viverra maximus, lacus enim gravida urna, at euismod velit nibh sit amet dui. Vestibulum sit amet quam congue, viverra tortor ac, sollicitudin dui. Maecenas dapibus ipsum ut mauris hendrerit, eu porta justo blandit."
+    "Joan Stone" : {
+      "bioCopy" : "YOO Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin dapibus, odio eu tempus suscipit, augue purus bibendum quam, sed commodo nisl eros in ipsum. Cras at interdum est. Quisque non lectus sem. Aliquam vehicula pellentesque nisl ut convallis. Mauris tincidunt convallis hendrerit. Curabitur condimentum eu arcu vestibulum facilisis. Ut non sapien ut est tristique lobortis facilisis ac urna. Duis sit amet hendrerit quam. Suspendisse et ligula nec sapien lacinia commodo. Donec eget vulputate sem. Vestibulum fermentum, nulla sit amet viverra maximus, lacus enim gravida urna, at euismod velit nibh sit amet dui. Vestibulum sit amet quam congue, viverra tortor ac, sollicitudin dui. Maecenas dapibus ipsum ut mauris hendrerit, eu porta justo blandit.",
+      "bioPic" : "assets/img/bios/stone_joan.jpg",
+      "interviewee" : "Joan Stone",
+      "interviewer" : "Name of Interviewer"
     },
-    "3": {
-      "videoUrl": "http://URLGOESHERE.mp4",
-      "interviewee": "Name of Interviewee",
-      "interviewer": "Name of Interviewer",
-      "bioPic": "http://URLGOESHERE.png",
-      "bioCopy": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin dapibus, odio eu tempus suscipit, augue purus bibendum quam, sed commodo nisl eros in ipsum. Cras at interdum est. Quisque non lectus sem. Aliquam vehicula pellentesque nisl ut convallis. Mauris tincidunt convallis hendrerit. Curabitur condimentum eu arcu vestibulum facilisis. Ut non sapien ut est tristique lobortis facilisis ac urna. Duis sit amet hendrerit quam. Suspendisse et ligula nec sapien lacinia commodo. Donec eget vulputate sem. Vestibulum fermentum, nulla sit amet viverra maximus, lacus enim gravida urna, at euismod velit nibh sit amet dui. Vestibulum sit amet quam congue, viverra tortor ac, sollicitudin dui. Maecenas dapibus ipsum ut mauris hendrerit, eu porta justo blandit."
+    "Malcolm Spaull" : {
+      "bioCopy" : "SUP Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin dapibus, odio eu tempus suscipit, augue purus bibendum quam, sed commodo nisl eros in ipsum. Cras at interdum est. Quisque non lectus sem. Aliquam vehicula pellentesque nisl ut convallis. Mauris tincidunt convallis hendrerit. Curabitur condimentum eu arcu vestibulum facilisis. Ut non sapien ut est tristique lobortis facilisis ac urna. Duis sit amet hendrerit quam. Suspendisse et ligula nec sapien lacinia commodo. Donec eget vulputate sem. Vestibulum fermentum, nulla sit amet viverra maximus, lacus enim gravida urna, at euismod velit nibh sit amet dui. Vestibulum sit amet quam congue, viverra tortor ac, sollicitudin dui. Maecenas dapibus ipsum ut mauris hendrerit, eu porta justo blandit.",
+      "bioPic" : "assets/img/bios/malcolm_spaull.jpg",
+      "interviewee" : "Malcolm Spaull",
+      "interviewer" : "Name of Interviewer",
+      "videoUrl" : "assets/videos/3.mp4"
+    },
+    "Malcolm Spaull2" : {
+      "bioCopy" : "SUP Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin dapibus, odio eu tempus suscipit, augue purus bibendum quam, sed commodo nisl eros in ipsum. Cras at interdum est. Quisque non lectus sem. Aliquam vehicula pellentesque nisl ut convallis. Mauris tincidunt convallis hendrerit. Curabitur condimentum eu arcu vestibulum facilisis. Ut non sapien ut est tristique lobortis facilisis ac urna. Duis sit amet hendrerit quam. Suspendisse et ligula nec sapien lacinia commodo. Donec eget vulputate sem. Vestibulum fermentum, nulla sit amet viverra maximus, lacus enim gravida urna, at euismod velit nibh sit amet dui. Vestibulum sit amet quam congue, viverra tortor ac, sollicitudin dui. Maecenas dapibus ipsum ut mauris hendrerit, eu porta justo blandit.",
+      "bioPic" : "assets/img/bios/malcolm_spaull.jpg",
+      "interviewee" : "Malcolm Spaull",
+      "interviewer" : "Name of Interviewer",
+      "videoUrl" : "assets/videos/4.mp4"
+    },
+    "Malcolm Spaull3" : {
+      "bioCopy" : "SUP Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin dapibus, odio eu tempus suscipit, augue purus bibendum quam, sed commodo nisl eros in ipsum. Cras at interdum est. Quisque non lectus sem. Aliquam vehicula pellentesque nisl ut convallis. Mauris tincidunt convallis hendrerit. Curabitur condimentum eu arcu vestibulum facilisis. Ut non sapien ut est tristique lobortis facilisis ac urna. Duis sit amet hendrerit quam. Suspendisse et ligula nec sapien lacinia commodo. Donec eget vulputate sem. Vestibulum fermentum, nulla sit amet viverra maximus, lacus enim gravida urna, at euismod velit nibh sit amet dui. Vestibulum sit amet quam congue, viverra tortor ac, sollicitudin dui. Maecenas dapibus ipsum ut mauris hendrerit, eu porta justo blandit.",
+      "bioPic" : "assets/img/bios/malcolm_spaull.jpg",
+      "interviewee" : "Malcolm Spaull",
+      "interviewer" : "Name of Interviewer",
+      "videoUrl" : "assets/videos/5.mp4"
+    },
+    "Malcolm Spaull4" : {
+      "bioCopy" : "SUP Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin dapibus, odio eu tempus suscipit, augue purus bibendum quam, sed commodo nisl eros in ipsum. Cras at interdum est. Quisque non lectus sem. Aliquam vehicula pellentesque nisl ut convallis. Mauris tincidunt convallis hendrerit. Curabitur condimentum eu arcu vestibulum facilisis. Ut non sapien ut est tristique lobortis facilisis ac urna. Duis sit amet hendrerit quam. Suspendisse et ligula nec sapien lacinia commodo. Donec eget vulputate sem. Vestibulum fermentum, nulla sit amet viverra maximus, lacus enim gravida urna, at euismod velit nibh sit amet dui. Vestibulum sit amet quam congue, viverra tortor ac, sollicitudin dui. Maecenas dapibus ipsum ut mauris hendrerit, eu porta justo blandit.",
+      "bioPic" : "assets/img/bios/malcolm_spaull.jpg",
+      "interviewee" : "Malcolm Spaull",
+      "interviewer" : "Name of Interviewer",
+      "videoUrl" : "assets/videos/6.mp4"
+    },
+    "Malcolm Spaull5" : {
+      "bioCopy" : "SUP Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin dapibus, odio eu tempus suscipit, augue purus bibendum quam, sed commodo nisl eros in ipsum. Cras at interdum est. Quisque non lectus sem. Aliquam vehicula pellentesque nisl ut convallis. Mauris tincidunt convallis hendrerit. Curabitur condimentum eu arcu vestibulum facilisis. Ut non sapien ut est tristique lobortis facilisis ac urna. Duis sit amet hendrerit quam. Suspendisse et ligula nec sapien lacinia commodo. Donec eget vulputate sem. Vestibulum fermentum, nulla sit amet viverra maximus, lacus enim gravida urna, at euismod velit nibh sit amet dui. Vestibulum sit amet quam congue, viverra tortor ac, sollicitudin dui. Maecenas dapibus ipsum ut mauris hendrerit, eu porta justo blandit.",
+      "bioPic" : "assets/img/bios/malcolm_spaull.jpg",
+      "interviewee" : "Malcolm Spaull",
+      "interviewer" : "Name of Interviewer",
+      "videoUrl" : "assets/videos/7.mp4"
+    },
+    "Malcolm Spaull6" : {
+      "bioCopy" : "SUP Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin dapibus, odio eu tempus suscipit, augue purus bibendum quam, sed commodo nisl eros in ipsum. Cras at interdum est. Quisque non lectus sem. Aliquam vehicula pellentesque nisl ut convallis. Mauris tincidunt convallis hendrerit. Curabitur condimentum eu arcu vestibulum facilisis. Ut non sapien ut est tristique lobortis facilisis ac urna. Duis sit amet hendrerit quam. Suspendisse et ligula nec sapien lacinia commodo. Donec eget vulputate sem. Vestibulum fermentum, nulla sit amet viverra maximus, lacus enim gravida urna, at euismod velit nibh sit amet dui. Vestibulum sit amet quam congue, viverra tortor ac, sollicitudin dui. Maecenas dapibus ipsum ut mauris hendrerit, eu porta justo blandit.",
+      "bioPic" : "assets/img/bios/malcolm_spaull.jpg",
+      "interviewee" : "Malcolm Spaull",
+      "interviewer" : "Name of Interviewer",
+      "videoUrl" : "assets/videos/8.mp4"
     }
   }
 }

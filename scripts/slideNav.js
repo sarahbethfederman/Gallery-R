@@ -7,8 +7,9 @@ var buttons = require('./buttons.js');
 
 var slideNav = {
     'names': [],
+    'currentSlide': undefined,
     'navContainer': undefined,
-    'init': function(data) {
+    'init': function(data, callback) {
         var self = this;
 
         for (var key in data) {
@@ -24,6 +25,18 @@ var slideNav = {
             li.innerHTML = array[index];
 
             self.navContainer.appendChild(li);
+
+            buttons.makeButton(li, function() {
+                var target = li.getAttribute('data-target-video');
+                callback(target);
+            });
+        });
+
+        self.initEvents();
+    },
+    'initEvents': function() {
+        this.names.forEach(function(element) {
+
         });
     },
     'move': function(offset) {

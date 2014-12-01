@@ -5,12 +5,12 @@ var Slide = require('./slide.js');  // Slide module
 var dataLoader = require('./dataLoader.js');
 var videoModule = require('./video.js');
 var buttons = require('./buttons.js');
-var slideNav = require('./slideNav.js');
+var slideNav = require('./slideNav');
 
 var loop = {
     'videoData': undefined,
     'slides': [],
-    'currentSlide': undefined,
+    'currentSlide': 0,
     'videoContainer': undefined,
     'contentContainer': undefined,
     'video': undefined,
@@ -82,18 +82,21 @@ var loop = {
         // the overlay is on
         self.overlayOn = true;
 
-        //console.log(self.video, self.video.classList);
-        console.log("contains filler class", self.video.classList.contains('filler'));
-
         // don't clear the overlay if it's a filler vid
         if (!self.video.classList.contains('filler')) {
             self.startTimer();
-        } else {
-            console.log("filler vid");
         }
     },
     'createSlides': function(vidData) {
         this.videoData = vidData;
+        var self = this;
+
+        // init the slideNav
+        slideNav.init(this.videoData, function(target) {
+            var offset = (self.slides.length-1) - target;
+            console.log(offset);
+            slideNav.move(offset);
+        });
 
         // create a slide for each video
         for (var video in this.videoData) {
@@ -133,6 +136,8 @@ var loop = {
 
         // INIT VIDEO CONTROLS
         buttons.initVidBtns(this.contentContainer.querySelector('.video-controls'), video);
+
+
     },
     'startLoop': function() {
         // set the currentSlide to the beginning
@@ -140,9 +145,6 @@ var loop = {
 
         // cycle the current slide in
         this.next();
-
-        // init the slideNav
-        slideNav.init(this.videoData);
     },
     'next': function(target) {
         var self = this;
@@ -152,9 +154,17 @@ var loop = {
             self.currentSlide = 0;
         }
 
-
         // if navigating to a specific slide
         if (target) {
+            // cycle the prev slide out
+            if (self.currentSlide == 0) {
+                // if at the beginning, cycle the last slide out
+                self.slides[self.slides.length-1].cycleOut();
+            } else {
+                // else, cycle out the previous one
+                self.slides[self.currentSlide-1].cycleOut();
+            }
+
             // cycle in the target
             setTimeout(function() {
                 self.slides[target].cycleIn();
@@ -162,12 +172,12 @@ var loop = {
                 // show the overlay
                 self.showOverlay();
 
+                // set current slide to the target
+                self.currentSlide = target;
+
                 // iterate to next slide
                 self.currentSlide++;
             }, 300);
-
-            // set current slide to the target
-            self.currentSlide = self.slides[target];
         } else {
             // cycle the prev slide out
             if (self.currentSlide == 0) {
@@ -181,7 +191,6 @@ var loop = {
             // cycle the next one in
             setTimeout(function() {
                 self.slides[self.currentSlide].cycleIn();
-
 
                 // show the overlay
                 self.showOverlay();
