@@ -35,7 +35,18 @@ var slideNav = {
         self.initEvents();
     },
     'initEvents': function() {
-        this.names.forEach(function(element) {
+        var self = this;
+        var viewAll = document.querySelector('.view-all');
+        var overlay = document.createElement('div');
+
+        //self.navContainer.appendChild(overlay);
+
+        buttons.makeButton(viewAll, function() {
+            self.navContainer.classList.toggle('viewing-all');
+            //self.navContainer.classList.toggle('overlay');
+        });
+
+        buttons.makeButton(document.querySelector('.content-container'), function() {
 
         });
     },

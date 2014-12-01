@@ -27,6 +27,7 @@
   cursor: pointer;
   margin-left: -2px;    // offset adjacent borders
   transition: all .3s ease-out;
+  z-index: 80;
   &:hover {
     opacity: 1;
   }

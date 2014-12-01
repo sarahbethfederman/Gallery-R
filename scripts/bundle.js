@@ -529,7 +529,18 @@ var slideNav = {
         self.initEvents();
     },
     'initEvents': function() {
-        this.names.forEach(function(element) {
+        var self = this;
+        var viewAll = document.querySelector('.view-all');
+        var overlay = document.createElement('div');
+
+        //self.navContainer.appendChild(overlay);
+
+        buttons.makeButton(viewAll, function() {
+            self.navContainer.classList.toggle('viewing-all');
+            //self.navContainer.classList.toggle('overlay');
+        });
+
+        buttons.makeButton(document.querySelector('.content-container'), function() {
 
         });
     },
@@ -573,16 +584,17 @@ var video = {
         root.appendChild(loader);
     },
     'loaderEnd': function(root) {
-        var loader = root.querySelector('.loader');
+        var loader = root.querySelectorAll('.loader');
 
-        // fade out the loader
-        loader.classList.add('fade-out');
-
-        // remove it from the DOM
         setTimeout(function() {
-            root.removeChild(loader);
-            //console.log('loader removed');
-        }, 500);
+            for (var i = 0; i < loader.length; i++) {
+                // fade out the loader
+                loader[i].classList.add('fade-out');
+
+                // remove it from the DOM
+                root.removeChild(loader[i]);
+            }
+        });
     }
 };
 

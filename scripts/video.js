@@ -22,16 +22,17 @@ var video = {
         root.appendChild(loader);
     },
     'loaderEnd': function(root) {
-        var loader = root.querySelector('.loader');
+        var loader = root.querySelectorAll('.loader');
 
-        // fade out the loader
-        loader.classList.add('fade-out');
-
-        // remove it from the DOM
         setTimeout(function() {
-            root.removeChild(loader);
-            //console.log('loader removed');
-        }, 500);
+            for (var i = 0; i < loader.length; i++) {
+                // fade out the loader
+                loader[i].classList.add('fade-out');
+
+                // remove it from the DOM
+                root.removeChild(loader[i]);
+            }
+        });
     }
 };
 
