@@ -92,10 +92,14 @@ var loop = {
         var self = this;
 
         // init the slideNav
-        slideNav.init(this.videoData, function(target) {
-            var offset = (self.slides.length-1) - target;
-            console.log(offset);
-            slideNav.move(offset);
+        slideNav.init(self.videoData, function(target) {
+            // calculate the offset for each slide
+
+            // move to next slide
+            self.next(target);
+
+            // move the slidenav
+            slideNav.move(target, self.currentSlide);
         });
 
         // create a slide for each video

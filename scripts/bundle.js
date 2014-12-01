@@ -278,10 +278,14 @@ var loop = {
         var self = this;
 
         // init the slideNav
-        slideNav.init(this.videoData, function(target) {
-            var offset = (self.slides.length-1) - target;
-            console.log(offset);
-            slideNav.move(offset);
+        slideNav.init(self.videoData, function(target) {
+            // calculate the offset for each slide
+
+            // move to next slide
+            self.next(target);
+
+            // move the slidenav
+            slideNav.move(target, self.currentSlide);
         });
 
         // create a slide for each video
@@ -529,8 +533,17 @@ var slideNav = {
 
         });
     },
-    'move': function(offset) {
+    'move': function(target, currentSlide) {
+        var self = this;
+        var slide = self.navContainer.querySelector('.slide');   // first instance of slide
+        var translatePx = slide.offsetWidth * target / 2;
 
+        if (target - currentSlide > 0) {    // positive means moving forward
+            translatePx = -translatePx;
+        }
+
+        console.log(translatePx);
+        self.navContainer.style.transform = 'translate(' + translatePx +'px,' + -1 * (slide.offsetHeight / 2) + 'px)';
     }
 };
 

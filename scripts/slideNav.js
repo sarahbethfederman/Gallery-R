@@ -39,8 +39,17 @@ var slideNav = {
 
         });
     },
-    'move': function(offset) {
+    'move': function(target, currentSlide) {
+        var self = this;
+        var slide = self.navContainer.querySelector('.slide');   // first instance of slide
+        var translatePx = slide.offsetWidth * target / 2;
 
+        if (target - currentSlide > 0) {    // positive means moving forward
+            translatePx = -translatePx;
+        }
+
+        console.log(translatePx);
+        self.navContainer.style.transform = 'translate(' + translatePx +'px,' + -1 * (slide.offsetHeight / 2) + 'px)';
     }
 };
 
