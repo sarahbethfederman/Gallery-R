@@ -15,11 +15,11 @@ var introLoader = {
         });
 
         // loader animation
-        video.addEventListener('progress', function () {
+        video.addEventListener('loadstart', function () {
             videoModule.loaderStart(container);
         });
 
-        video.addEventListener('loadeddata', function () {
+        video.addEventListener('canplay', function () {
             videoModule.loaderEnd(container);
         });
 

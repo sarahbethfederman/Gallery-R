@@ -1,26 +1,37 @@
 .bio {  // header
-  width: 45%;
+  width: 70%;
+  height: 200px;
   &__title {
     font-weight: 100;
     text-transform: uppercase;
     letter-spacing: .4rem;
-    font-size: 1.3rem;
+    font-size: 1.7rem;
+    float: left;
   }
   &__pic {
-    width: 100px;
-    height: 100px;
-    opacity: 0;
+    display: none;
+    width: 70px;
+    height: 70px;
     float: left;
-    margin-bottom: 100%;
-    margin-right: 20px;
-    border: 2px solid #ccc;
+    margin-bottom: 20px;
+    margin-right: 25px;
+    border: 2px double #eee;
     border-radius: 100%;
   }
   &__copy {
     width: 100%;
     opacity: .9;
+    color: #bbb;
     font-size: .9rem;
+    text-align: justify;
+    float: left;
     line-height: 1.7rem;
     font-weight: 100;
+    -webkit-columns: 200px 2;
+    -webkit-column-gap: 35px;
+    -moz-columns: 200px 2;
+    -moz-column-gap: 35px;
+    columns: 200px 2;
+    column-gap: 35px;
   }
 }

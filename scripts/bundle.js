@@ -110,11 +110,11 @@ var introLoader = {
         });
 
         // loader animation
-        video.addEventListener('progress', function () {
+        video.addEventListener('loadstart', function () {
             videoModule.loaderStart(container);
         });
 
-        video.addEventListener('loadeddata', function () {
+        video.addEventListener('canplay', function () {
             videoModule.loaderEnd(container);
         });
 
@@ -207,15 +207,38 @@ var loop = {
             progressBar = self.videoContainer.querySelector('progress');
 
         // display the video
-        self.videoContainer.style.display = "block";
+        self.videoContainer.classList.add('fade-in');
 
         // display the content
-        self.contentContainer.style.display = "block";
+        self.contentContainer.classList.add('fade-in');
 
+        // init events
         self.initEvents(video, progressBar);
+        self.mouseEffect();
 
         // get the video data. When loaded, create the slides
-        dataLoader.getData(self.createSlides.bind(this));
+        dataLoader.getData(self.createSlides.bind(self));
+    },
+    'mouseEffect': function() {
+        var self = this,
+            t;
+
+        (function timer() {
+            self.contentContainer.classList.add('fade-out');
+
+            // start the timer
+            t = setTimeout(function() {
+                console.log("time finished");
+                timer();
+            }, 100);
+        })();
+
+
+        // reset the timers on every mouse move
+        self.contentContainer.addEventListener('mousemove', function() {
+            clearTimeout(t);
+            console.log("timer cleared");
+        });
     },
     'createSlides': function(vidData) {
         this.videoData = vidData;
@@ -271,34 +294,44 @@ var loop = {
         slideNav.init(this.videoData);
     },
     'next': function(target) {
+        var self = this;
+
         // once at the end, wrap around to loop
-        if (this.currentSlide > this.slides.length-1) {
-            this.currentSlide = 0;
+        if (self.currentSlide > self.slides.length-1) {
+            self.currentSlide = 0;
         }
 
         // if navigating to a specific slide
         if (target) {
             // cycle in the target
-            this.slides[target].cycleIn();
+            setTimeout(function() {
+                self.slides[target].cycleIn();
+
+                // iterate to next slide
+                self.currentSlide++;
+            }, 300);
 
             // set current slide to the target
-            this.currentSlide = this.slides[target];
+            self.currentSlide = self.slides[target];
         } else {
             // cycle the prev slide out
-            if (this.currentSlide == 0) {
+            if (self.currentSlide == 0) {
                 // if at the beginning, cycle the last slide out
-                this.slides[this.slides.length-1].cycleOut();
+                self.slides[self.slides.length-1].cycleOut();
             } else {
                 // else, cycle out the previous one
-                this.slides[this.currentSlide-1].cycleOut();
+                self.slides[self.currentSlide-1].cycleOut();
             }
 
             // cycle the next one in
-            this.slides[this.currentSlide].cycleIn();
+            setTimeout(function() {
+                self.slides[self.currentSlide].cycleIn();
+
+                // iterate to next slide
+                self.currentSlide++;
+            }, 300);
         }
 
-        // iterate to next slide
-        this.currentSlide++;
     }
 };
 
@@ -321,6 +354,7 @@ var Slide = function() {
         this.container = container;                                     // video container div
         this.contentContainer = contentContainer;                       // content container div
         this.videoEl = container.querySelector('.video-loop');          // <video> element
+        this.header = contentContainer.querySelector('header');
 
         if (videoData['videoUrl']) {
             this.videoUrl = videoData['videoUrl'];
@@ -329,6 +363,14 @@ var Slide = function() {
 
 
     Slide.prototype.cycleIn = function() {              // start this slide
+
+        // set up the header
+        this.createHeader();
+
+        //// animate stuff in
+        //this.contentContainer.classList.remove('fade-out');
+        //this.contentContainer.classList.add('fade-in');
+
         // if there is a video, play it
         if (this.videoUrl) {
             this.videoEl.src = this.videoUrl;
@@ -343,17 +385,14 @@ var Slide = function() {
             this.videoEl.style.width = 'auto';
             this.videoEl.classList.add('blur');
             this.videoEl.play();
-
         }
 
-        // set up the header
-        this.createHeader();
     };
 
     Slide.prototype.cycleOut = function(callback) {     // end & move this slide out
-        // remove the header
-
-        // animate everything out
+        //// animate everything out
+        //this.contentContainer.classList.remove('fade-in');
+        //this.contentContainer.classList.add('fade-out');
 
         // if there's a callback, execute it
         if (callback) {
@@ -362,24 +401,21 @@ var Slide = function() {
     };
 
     Slide.prototype.createHeader = function() {
-        var header = this.contentContainer.querySelector('header');
-
         // set the bio picture
         if (this.bioPic) {
-            header.querySelector('.bio__pic').classList.remove('hide');
-            header.querySelector('.bio__pic').classList.add('fade-in');
-            header.querySelector('.bio__pic').src = this.bioPic;
-
+            this.header.querySelector('.bio__pic').classList.add('show');
+            this.header.querySelector('.bio__pic').classList.remove('hide');
+            this.header.querySelector('.bio__pic').src = this.bioPic;
         } else {
-            header.querySelector('.bio__pic').classList.remove('fade-in');
-            header.querySelector('.bio__pic').classList.add('hide');
+            this.header.querySelector('.bio__pic').classList.remove('show');
+            this.header.querySelector('.bio__pic').classList.add('hide');
         }
 
         // set the bio title
-        header.querySelector('.bio__title').innerHTML = this.interviewee;
+        this.header.querySelector('.bio__title').innerHTML = this.interviewee;
 
         // set the bio copy
-        header.querySelector('.bio__copy').innerHTML = this.bioCopy;
+        this.header.querySelector('.bio__copy').innerHTML = this.bioCopy;
     };
 
     return Slide;
@@ -392,6 +428,8 @@ module.exports = Slide;
  * Created by Sarah on 11/29/14.
  */
 "use strict";
+
+var buttons = require('./buttons.js');
 
 var slideNav = {
     'names': [],
@@ -420,7 +458,7 @@ var slideNav = {
 };
 
 module.exports = slideNav;
-},{}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/video.js":[function(require,module,exports){
+},{"./buttons.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/buttons.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/video.js":[function(require,module,exports){
 /**
  * Collection of video events
  * Created by Sarah on 11/28/14.
@@ -451,10 +489,9 @@ var video = {
         loader.classList.add('fade-out');
 
         // remove it from the DOM
-        // FIX: FIRES TOO SOON
         setTimeout(function() {
             root.removeChild(loader);
-            console.log('loader removed');
+            //console.log('loader removed');
         }, 500);
     }
 };

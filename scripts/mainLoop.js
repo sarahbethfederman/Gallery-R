@@ -19,15 +19,38 @@ var loop = {
             progressBar = self.videoContainer.querySelector('progress');
 
         // display the video
-        self.videoContainer.style.display = "block";
+        self.videoContainer.classList.add('fade-in');
 
         // display the content
-        self.contentContainer.style.display = "block";
+        self.contentContainer.classList.add('fade-in');
 
+        // init events
         self.initEvents(video, progressBar);
+        self.mouseEffect();
 
         // get the video data. When loaded, create the slides
-        dataLoader.getData(self.createSlides.bind(this));
+        dataLoader.getData(self.createSlides.bind(self));
+    },
+    'mouseEffect': function() {
+        var self = this,
+            t;
+
+        (function timer() {
+            self.contentContainer.classList.add('fade-out');
+
+            // start the timer
+            t = setTimeout(function() {
+                console.log("time finished");
+                timer();
+            }, 100);
+        })();
+
+
+        // reset the timers on every mouse move
+        self.contentContainer.addEventListener('mousemove', function() {
+            clearTimeout(t);
+            console.log("timer cleared");
+        });
     },
     'createSlides': function(vidData) {
         this.videoData = vidData;
@@ -83,34 +106,44 @@ var loop = {
         slideNav.init(this.videoData);
     },
     'next': function(target) {
+        var self = this;
+
         // once at the end, wrap around to loop
-        if (this.currentSlide > this.slides.length-1) {
-            this.currentSlide = 0;
+        if (self.currentSlide > self.slides.length-1) {
+            self.currentSlide = 0;
         }
 
         // if navigating to a specific slide
         if (target) {
             // cycle in the target
-            this.slides[target].cycleIn();
+            setTimeout(function() {
+                self.slides[target].cycleIn();
+
+                // iterate to next slide
+                self.currentSlide++;
+            }, 300);
 
             // set current slide to the target
-            this.currentSlide = this.slides[target];
+            self.currentSlide = self.slides[target];
         } else {
             // cycle the prev slide out
-            if (this.currentSlide == 0) {
+            if (self.currentSlide == 0) {
                 // if at the beginning, cycle the last slide out
-                this.slides[this.slides.length-1].cycleOut();
+                self.slides[self.slides.length-1].cycleOut();
             } else {
                 // else, cycle out the previous one
-                this.slides[this.currentSlide-1].cycleOut();
+                self.slides[self.currentSlide-1].cycleOut();
             }
 
             // cycle the next one in
-            this.slides[this.currentSlide].cycleIn();
+            setTimeout(function() {
+                self.slides[self.currentSlide].cycleIn();
+
+                // iterate to next slide
+                self.currentSlide++;
+            }, 300);
         }
 
-        // iterate to next slide
-        this.currentSlide++;
     }
 };
 

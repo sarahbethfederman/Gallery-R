@@ -15,6 +15,7 @@ var Slide = function() {
         this.container = container;                                     // video container div
         this.contentContainer = contentContainer;                       // content container div
         this.videoEl = container.querySelector('.video-loop');          // <video> element
+        this.header = contentContainer.querySelector('header');
 
         if (videoData['videoUrl']) {
             this.videoUrl = videoData['videoUrl'];
@@ -23,6 +24,14 @@ var Slide = function() {
 
 
     Slide.prototype.cycleIn = function() {              // start this slide
+
+        // set up the header
+        this.createHeader();
+
+        //// animate stuff in
+        //this.contentContainer.classList.remove('fade-out');
+        //this.contentContainer.classList.add('fade-in');
+
         // if there is a video, play it
         if (this.videoUrl) {
             this.videoEl.src = this.videoUrl;
@@ -37,17 +46,14 @@ var Slide = function() {
             this.videoEl.style.width = 'auto';
             this.videoEl.classList.add('blur');
             this.videoEl.play();
-
         }
 
-        // set up the header
-        this.createHeader();
     };
 
     Slide.prototype.cycleOut = function(callback) {     // end & move this slide out
-        // remove the header
-
-        // animate everything out
+        //// animate everything out
+        //this.contentContainer.classList.remove('fade-in');
+        //this.contentContainer.classList.add('fade-out');
 
         // if there's a callback, execute it
         if (callback) {
@@ -56,24 +62,21 @@ var Slide = function() {
     };
 
     Slide.prototype.createHeader = function() {
-        var header = this.contentContainer.querySelector('header');
-
         // set the bio picture
         if (this.bioPic) {
-            header.querySelector('.bio__pic').classList.remove('hide');
-            header.querySelector('.bio__pic').classList.add('fade-in');
-            header.querySelector('.bio__pic').src = this.bioPic;
-
+            this.header.querySelector('.bio__pic').classList.add('show');
+            this.header.querySelector('.bio__pic').classList.remove('hide');
+            this.header.querySelector('.bio__pic').src = this.bioPic;
         } else {
-            header.querySelector('.bio__pic').classList.remove('fade-in');
-            header.querySelector('.bio__pic').classList.add('hide');
+            this.header.querySelector('.bio__pic').classList.remove('show');
+            this.header.querySelector('.bio__pic').classList.add('hide');
         }
 
         // set the bio title
-        header.querySelector('.bio__title').innerHTML = this.interviewee;
+        this.header.querySelector('.bio__title').innerHTML = this.interviewee;
 
         // set the bio copy
-        header.querySelector('.bio__copy').innerHTML = this.bioCopy;
+        this.header.querySelector('.bio__copy').innerHTML = this.bioCopy;
     };
 
     return Slide;

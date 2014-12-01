@@ -3,6 +3,8 @@
  */
 "use strict";
 
+var buttons = require('./buttons.js');
+
 var slideNav = {
     'names': [],
     'navContainer': undefined,

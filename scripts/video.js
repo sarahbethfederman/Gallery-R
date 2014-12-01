@@ -28,10 +28,9 @@ var video = {
         loader.classList.add('fade-out');
 
         // remove it from the DOM
-        // FIX: FIRES TOO SOON
         setTimeout(function() {
             root.removeChild(loader);
-            console.log('loader removed');
+            //console.log('loader removed');
         }, 500);
     }
 };
