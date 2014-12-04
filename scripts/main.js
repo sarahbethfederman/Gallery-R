@@ -13,6 +13,7 @@ var main = {
   'slideNav': require('./slideNav.js'),
   'preloader': require('./preloader.js'),
   'Slide': require('./slide.js'),
+  'videoModule': require('./video.js'),
   'init': function() {
     console.log("inited!");
     var self = this;
@@ -24,7 +25,9 @@ var main = {
         introContainer = document.querySelector('.intro-container');
 
     // preload
-    preloader.load(introVid.src);
+    self.preloader.load(introVid.src);
+    // init the video events module
+    self.videoModule.init();
 
     self.Slide.prototype.fillerUrl = "assets/videos/filler.mp4";
     self.slideNav.navContainer = document.querySelector('.slide-container');

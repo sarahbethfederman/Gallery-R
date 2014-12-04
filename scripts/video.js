@@ -14,7 +14,6 @@ var video = {
 
         this.loaderStart.bind(this);
         this.loaderEnd.bind(this);
-
     },
     'progressBar': function(video, progressBar) {
         // get the percentage of video played
@@ -23,13 +22,32 @@ var video = {
         // set the progress bar value
         progressBar.value = percentage;
     },
-    'loaderStart': function(root) {
+    'loaderStart': function(root, video) {
+        var self = this;
 
         // fill it with the loader SVG
-        root.appendChild(this.loader);
+        root.appendChild(self.loader);
+
+        //self.loaderEnd(root, video);
     },
-    'loaderEnd': function(root) {
-        root.removeChild(this.loader);
+    'loaderEnd': function(root, video) {
+        var self = this;
+
+        root.removeChild(self.loader);
+
+        video.play();
+
+        //function checkLoad() {
+        //    if (video.readyState === 4) {
+        //        console.log("ready to play");
+        //        root.removeChild(self.loader);
+        //        video.play();
+        //    } else {
+        //        setTimeout(checkLoad, 100);
+        //    }
+        //}
+        //
+        //checkLoad();
     }
 };
 

@@ -112,9 +112,6 @@ var loop = {
             }
         }
 
-        // start preloader
-        preloader.start(self.slides);
-
         // start looping
         this.startLoop();
     },
@@ -126,25 +123,24 @@ var loop = {
         video.load();
 
         video.addEventListener('loadstart', function () {
-            videoModule.loaderStart(self.videoContainer);
+            videoModule.loaderStart(self.videoContainer, self.video);
             console.log("loadstarted");
         });
 
         video.addEventListener('canplaythrough', function () {
-            videoModule.loaderEnd(self.videoContainer);
+            videoModule.loaderEnd(self.videoContainer, self.video);
             console.log("canplaythrough");
-            video.play();
         });
 
-        video.addEventListener('waiting', function () {
-            videoModule.loaderStart(self.videoContainer);
-            console.log('waiting');
-        });
-
-        video.addEventListener('stalled', function () {
-            videoModule.loaderStart(self.videoContainer);
-            console.log('stalled');
-        });
+        //video.addEventListener('waiting', function () {
+        //    videoModule.loaderStart(self.videoContainer, self.video);
+        //    console.log('waiting');
+        //});
+        //
+        //video.addEventListener('stalled', function () {
+        //    videoModule.loaderStart(self.videoContainer, self.video);
+        //    console.log('stalled');
+        //});
 
         // progress bar length corresponds to timeupdate function
         video.addEventListener('timeupdate', function() {
@@ -163,6 +159,9 @@ var loop = {
         // set the currentSlide to the beginning
         this.currentSlide = 0;
 
+        // start preloader
+        //preloader.start(this.slides);
+
         // cycle the current slide in
         this.next();
     },
@@ -173,7 +172,7 @@ var loop = {
         self.video.pause();
 
         // preload next video
-        //preloader.load(self.slides[self.currentSlide].videoUrl);
+        preloader.load(self.slides[self.currentSlide].videoUrl);
 
         // once at the end, wrap around to loop
         if (self.currentSlide > self.slides.length-1) {

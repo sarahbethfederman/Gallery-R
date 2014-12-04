@@ -16,6 +16,9 @@ var Slide = function() {
 
         if (videoData['videoUrl']) {
             this.videoUrl = videoData['videoUrl'];
+        } else {
+            this.isFiller = true;
+            this.videoUrl = this.fillerUrl;
         }
     };
 
@@ -28,22 +31,21 @@ var Slide = function() {
         this.container.classList.add('fade-in');
 
         // if there is a video, play it
-        if (this.videoUrl) {
+        //if (!this.isFiller) {
             this.videoEl.src = this.videoUrl;
             this.videoEl.style.opacity = '.7';
             this.videoEl.style.width = '100%';
             this.videoEl.classList.add('blur');
             this.videoEl.classList.remove('filler');
            // this.videoEl.play();
-        } else {
-            // else, dim and play the filler
-            this.videoEl.src = this.fillerUrl;  // filler url is hooked up in main.js
-            this.videoEl.style.opacity = '.2';
-            this.videoEl.style.width = 'auto';
-            this.videoEl.classList.add('blur');
-            this.videoEl.classList.add('filler');
-            //this.videoEl.play();
-        }
+        //} else {
+        //    // else, dim and play the filler
+        //    this.videoEl.src = this.fillerUrl;  // filler url is hooked up in main.js
+        //    this.videoEl.style.opacity = '.2';
+        //    this.videoEl.style.width = 'auto';
+        //    this.videoEl.classList.add('blur');
+        //    //this.videoEl.play();
+        //}
 
     };
 
