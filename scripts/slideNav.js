@@ -7,6 +7,7 @@ var buttons = require('./buttons.js');
 
 var slideNav = {
     'names': [],
+    'slides': [],
     'currentSlide': undefined,
     'navContainer': undefined,
     'init': function(data, callback) {
@@ -24,6 +25,8 @@ var slideNav = {
             li.setAttribute("data-target-video", index);
             li.innerHTML = array[index];
 
+            self.slides.push(li);
+
             self.navContainer.appendChild(li);
 
             buttons.makeButton(li, function() {
@@ -38,17 +41,18 @@ var slideNav = {
         var self = this;
         var viewAll = document.querySelector('.view-all');
         var overlay = document.createElement('div');
-
-        //self.navContainer.appendChild(overlay);
+        overlay.classList.add("overlay");
 
         buttons.makeButton(viewAll, function() {
             self.navContainer.classList.toggle('viewing-all');
-            //self.navContainer.classList.toggle('overlay');
+
+            if (self.navContainer.classList.contains('viewing-all')) {
+                viewAll.innerHTML = "Close";
+            } else {
+                viewAll.innerHTML = "View all videos";
+            }
         });
 
-        buttons.makeButton(document.querySelector('.content-container'), function() {
-
-        });
     },
     'move': function(target, currentSlide) {
         var self = this;
@@ -58,8 +62,6 @@ var slideNav = {
         if (target - currentSlide > 0) {    // positive means moving forward
             translatePx = -translatePx;
         }
-
-        console.log(translatePx);
         self.navContainer.style.transform = 'translate(' + translatePx +'px,' + -1 * (slide.offsetHeight / 2) + 'px)';
     }
 };

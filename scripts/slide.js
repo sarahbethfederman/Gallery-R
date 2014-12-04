@@ -1,12 +1,9 @@
 // slide module
 "use strict";
 
-var buttonModule = require('./buttons.js');
-var videoModule = require('./video.js');
 
 var Slide = function() {
     var Slide = function(videoData, container, contentContainer) {           // videoData is JSON object
-        this.fillerUrl = "assets/videos/filler.mp4";                    // path to filler video
         this.posterUrl = videoData['posterUrl'];                        // path to poster URL
         this.bioPic = videoData['bioPic'];                              // path the bio avatar
         this.bioCopy = videoData['bioCopy'];                            // biography text/html string
@@ -22,7 +19,6 @@ var Slide = function() {
         }
     };
 
-
     Slide.prototype.cycleIn = function() {              // start this slide
         // set up the header
         this.createHeader();
@@ -31,7 +27,6 @@ var Slide = function() {
         this.container.classList.remove('fade-out');
         this.container.classList.add('fade-in');
 
-
         // if there is a video, play it
         if (this.videoUrl) {
             this.videoEl.src = this.videoUrl;
@@ -39,15 +34,15 @@ var Slide = function() {
             this.videoEl.style.width = '100%';
             this.videoEl.classList.add('blur');
             this.videoEl.classList.remove('filler');
-            this.videoEl.play();
+           // this.videoEl.play();
         } else {
             // else, dim and play the filler
-            this.videoEl.src = this.fillerUrl;
+            this.videoEl.src = this.fillerUrl;  // filler url is hooked up in main.js
             this.videoEl.style.opacity = '.2';
             this.videoEl.style.width = 'auto';
             this.videoEl.classList.add('blur');
             this.videoEl.classList.add('filler');
-            this.videoEl.play();
+            //this.videoEl.play();
         }
 
     };

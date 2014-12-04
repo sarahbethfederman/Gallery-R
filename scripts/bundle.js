@@ -102,18 +102,35 @@ var introLoader = {
     'init': function(container, video, progressBar, skipBtn) {
         var self = this;
 
+        // init the video events module
+        videoModule.init();
+
         // set up the skip button
         buttons.makeButton(skipBtn, function() {
             self.endIntro(container, video);
         });
 
+        // start video load
+        video.load();
+
         // loader animation
         video.addEventListener('loadstart', function () {
             videoModule.loaderStart(container);
+            console.log("loadstarted");
         });
 
-        video.addEventListener('canplay', function () {
+        video.addEventListener('canplaythrough', function () {
             videoModule.loaderEnd(container);
+        });
+
+        video.addEventListener('waiting', function () {
+            videoModule.loaderStart(container);
+            console.log('waiting');
+        });
+
+        video.addEventListener('stalled', function () {
+            videoModule.loaderStart(container);
+            console.log('waiting');
         });
 
         // progress bar length corresponds to timeupdate function
@@ -156,6 +173,8 @@ var main = {
   'introLoader': require('./introLoader.js'),
   'mainLoop': require('./mainLoop.js'),
   'slideNav': require('./slideNav.js'),
+  'preloader': require('./preloader.js'),
+  'Slide': require('./slide.js'),
   'init': function() {
     console.log("inited!");
     var self = this;
@@ -166,6 +185,10 @@ var main = {
         skipBtn = document.querySelector('[rel="js-skip-intro"'),
         introContainer = document.querySelector('.intro-container');
 
+    // preload
+    preloader.load(introVid.src);
+
+    self.Slide.prototype.fillerUrl = "assets/videos/filler.mp4";
     self.slideNav.navContainer = document.querySelector('.slide-container');
     self.mainLoop.videoContainer = document.querySelector('.video-container');
     self.mainLoop.contentContainer = document.querySelector('.content-container');
@@ -183,7 +206,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   main.init();
 });
 
-},{"./buttons.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/buttons.js","./dataLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/dataLoader.js","./introLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/introLoader.js","./mainLoop.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/mainLoop.js","./slideNav.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slideNav.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/mainLoop.js":[function(require,module,exports){
+},{"./buttons.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/buttons.js","./dataLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/dataLoader.js","./introLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/introLoader.js","./mainLoop.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/mainLoop.js","./preloader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/preloader.js","./slide.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slide.js","./slideNav.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slideNav.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/mainLoop.js":[function(require,module,exports){
 // Main loop
 "use strict";
 
@@ -192,6 +215,7 @@ var dataLoader = require('./dataLoader.js');
 var videoModule = require('./video.js');
 var buttons = require('./buttons.js');
 var slideNav = require('./slideNav');
+var preloader = require('./preloader.js');
 
 var loop = {
     'videoData': undefined,
@@ -293,9 +317,12 @@ var loop = {
             if (this.videoData.hasOwnProperty(video)) {
                 var slide = new Slide(this.videoData[video], this.videoContainer, this.contentContainer);
                 slide.key = video;  // store the access key as the json object name
-                this.slides.push(slide);
+                self.slides.push(slide);
             }
         }
+
+        // start preloader
+        preloader.start(self.slides);
 
         // start looping
         this.startLoop();
@@ -304,14 +331,28 @@ var loop = {
         // LOADER ANIMATION
         var self = this;
 
+        // start video load
+        video.load();
+
         video.addEventListener('loadstart', function () {
             videoModule.loaderStart(self.videoContainer);
-            console.log("loader started");
+            console.log("loadstarted");
         });
 
-        video.addEventListener('loadeddata', function () {
+        video.addEventListener('canplaythrough', function () {
             videoModule.loaderEnd(self.videoContainer);
-            console.log("loader ended");
+            console.log("canplaythrough");
+            video.play();
+        });
+
+        video.addEventListener('waiting', function () {
+            videoModule.loaderStart(self.videoContainer);
+            console.log('waiting');
+        });
+
+        video.addEventListener('stalled', function () {
+            videoModule.loaderStart(self.videoContainer);
+            console.log('stalled');
         });
 
         // progress bar length corresponds to timeupdate function
@@ -326,8 +367,6 @@ var loop = {
 
         // INIT VIDEO CONTROLS
         buttons.initVidBtns(this.contentContainer.querySelector('.video-controls'), video);
-
-
     },
     'startLoop': function() {
         // set the currentSlide to the beginning
@@ -338,6 +377,12 @@ var loop = {
     },
     'next': function(target) {
         var self = this;
+
+        // pause current video
+        self.video.pause();
+
+        // preload next video
+        //preloader.load(self.slides[self.currentSlide].videoUrl);
 
         // once at the end, wrap around to loop
         if (self.currentSlide > self.slides.length-1) {
@@ -389,21 +434,50 @@ var loop = {
                 self.currentSlide++;
             }, 300);
         }
-
     }
 };
 
 module.exports = loop;
-},{"./buttons.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/buttons.js","./dataLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/dataLoader.js","./slide.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slide.js","./slideNav":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slideNav.js","./video.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/video.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slide.js":[function(require,module,exports){
+},{"./buttons.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/buttons.js","./dataLoader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/dataLoader.js","./preloader.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/preloader.js","./slide.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slide.js","./slideNav":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slideNav.js","./video.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/video.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/preloader.js":[function(require,module,exports){
+/**
+ * Created by Sarah on 12/1/14.
+ */
+
+var preloader = {
+    'ghost': document.createElement("video"),
+    'ghost2': document.createElement("video"),
+    'currentVid': 0,
+    'load': function(url) {
+        self.ghost2.src = url;
+    },
+    'start': function(vids) {
+        var self = this;
+
+        self.ghost.addEventListener('canplaythrough', startLoad);
+
+        // load the first one
+        self.ghost.src = vids[self.currentVid].videoUrl;
+
+
+        function startLoad() {
+            self.currentVid++;
+            self.ghost.src = url;
+
+            console.log("canplay" + self.currentVid);
+        }
+    }
+};
+
+
+
+module.exports = preloader;
+},{}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slide.js":[function(require,module,exports){
 // slide module
 "use strict";
 
-var buttonModule = require('./buttons.js');
-var videoModule = require('./video.js');
 
 var Slide = function() {
     var Slide = function(videoData, container, contentContainer) {           // videoData is JSON object
-        this.fillerUrl = "assets/videos/filler.mp4";                    // path to filler video
         this.posterUrl = videoData['posterUrl'];                        // path to poster URL
         this.bioPic = videoData['bioPic'];                              // path the bio avatar
         this.bioCopy = videoData['bioCopy'];                            // biography text/html string
@@ -419,7 +493,6 @@ var Slide = function() {
         }
     };
 
-
     Slide.prototype.cycleIn = function() {              // start this slide
         // set up the header
         this.createHeader();
@@ -428,7 +501,6 @@ var Slide = function() {
         this.container.classList.remove('fade-out');
         this.container.classList.add('fade-in');
 
-
         // if there is a video, play it
         if (this.videoUrl) {
             this.videoEl.src = this.videoUrl;
@@ -436,15 +508,15 @@ var Slide = function() {
             this.videoEl.style.width = '100%';
             this.videoEl.classList.add('blur');
             this.videoEl.classList.remove('filler');
-            this.videoEl.play();
+           // this.videoEl.play();
         } else {
             // else, dim and play the filler
-            this.videoEl.src = this.fillerUrl;
+            this.videoEl.src = this.fillerUrl;  // filler url is hooked up in main.js
             this.videoEl.style.opacity = '.2';
             this.videoEl.style.width = 'auto';
             this.videoEl.classList.add('blur');
             this.videoEl.classList.add('filler');
-            this.videoEl.play();
+            //this.videoEl.play();
         }
 
     };
@@ -491,7 +563,7 @@ var Slide = function() {
 
 
 module.exports = Slide;
-},{"./buttons.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/buttons.js","./video.js":"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/video.js"}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slideNav.js":[function(require,module,exports){
+},{}],"/Users/Sarah/Creative Cloud Files/RIT/JS/Project 2/Gallery R/scripts/slideNav.js":[function(require,module,exports){
 /**
  * Created by Sarah on 11/29/14.
  */
@@ -501,6 +573,7 @@ var buttons = require('./buttons.js');
 
 var slideNav = {
     'names': [],
+    'slides': [],
     'currentSlide': undefined,
     'navContainer': undefined,
     'init': function(data, callback) {
@@ -518,6 +591,8 @@ var slideNav = {
             li.setAttribute("data-target-video", index);
             li.innerHTML = array[index];
 
+            self.slides.push(li);
+
             self.navContainer.appendChild(li);
 
             buttons.makeButton(li, function() {
@@ -532,17 +607,18 @@ var slideNav = {
         var self = this;
         var viewAll = document.querySelector('.view-all');
         var overlay = document.createElement('div');
-
-        //self.navContainer.appendChild(overlay);
+        overlay.classList.add("overlay");
 
         buttons.makeButton(viewAll, function() {
             self.navContainer.classList.toggle('viewing-all');
-            //self.navContainer.classList.toggle('overlay');
+
+            if (self.navContainer.classList.contains('viewing-all')) {
+                viewAll.innerHTML = "Close";
+            } else {
+                viewAll.innerHTML = "View all videos";
+            }
         });
 
-        buttons.makeButton(document.querySelector('.content-container'), function() {
-
-        });
     },
     'move': function(target, currentSlide) {
         var self = this;
@@ -552,8 +628,6 @@ var slideNav = {
         if (target - currentSlide > 0) {    // positive means moving forward
             translatePx = -translatePx;
         }
-
-        console.log(translatePx);
         self.navContainer.style.transform = 'translate(' + translatePx +'px,' + -1 * (slide.offsetHeight / 2) + 'px)';
     }
 };
@@ -567,6 +641,17 @@ module.exports = slideNav;
 
 
 var video = {
+    'loader': undefined,
+    'init': function() {
+        this.loader = document.createElement('div');
+
+        this.loader.classList.add('loader');
+        this.loader.innerHTML = '<svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"width="80px" height="80px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve"><path fill="#000" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z"> <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"/></path></svg>';
+
+        this.loaderStart.bind(this);
+        this.loaderEnd.bind(this);
+
+    },
     'progressBar': function(video, progressBar) {
         // get the percentage of video played
         var percentage = (video.currentTime / video.duration) * 100;
@@ -575,26 +660,12 @@ var video = {
         progressBar.value = percentage;
     },
     'loaderStart': function(root) {
-        // create the loader div
-        var loader = document.createElement('div');
-        loader.classList.add('loader');
 
         // fill it with the loader SVG
-        loader.innerHTML = '<svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"width="80px" height="80px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve"><path fill="#000" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z"> <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"/></path></svg>';
-        root.appendChild(loader);
+        root.appendChild(this.loader);
     },
     'loaderEnd': function(root) {
-        var loader = root.querySelectorAll('.loader');
-
-        setTimeout(function() {
-            for (var i = 0; i < loader.length; i++) {
-                // fade out the loader
-                loader[i].classList.add('fade-out');
-
-                // remove it from the DOM
-                root.removeChild(loader[i]);
-            }
-        });
+        root.removeChild(this.loader);
     }
 };
 

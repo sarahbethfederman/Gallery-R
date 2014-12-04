@@ -11,6 +11,8 @@ var main = {
   'introLoader': require('./introLoader.js'),
   'mainLoop': require('./mainLoop.js'),
   'slideNav': require('./slideNav.js'),
+  'preloader': require('./preloader.js'),
+  'Slide': require('./slide.js'),
   'init': function() {
     console.log("inited!");
     var self = this;
@@ -21,6 +23,10 @@ var main = {
         skipBtn = document.querySelector('[rel="js-skip-intro"'),
         introContainer = document.querySelector('.intro-container');
 
+    // preload
+    preloader.load(introVid.src);
+
+    self.Slide.prototype.fillerUrl = "assets/videos/filler.mp4";
     self.slideNav.navContainer = document.querySelector('.slide-container');
     self.mainLoop.videoContainer = document.querySelector('.video-container');
     self.mainLoop.contentContainer = document.querySelector('.content-container');

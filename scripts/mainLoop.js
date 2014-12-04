@@ -6,6 +6,7 @@ var dataLoader = require('./dataLoader.js');
 var videoModule = require('./video.js');
 var buttons = require('./buttons.js');
 var slideNav = require('./slideNav');
+var preloader = require('./preloader.js');
 
 var loop = {
     'videoData': undefined,
@@ -107,9 +108,12 @@ var loop = {
             if (this.videoData.hasOwnProperty(video)) {
                 var slide = new Slide(this.videoData[video], this.videoContainer, this.contentContainer);
                 slide.key = video;  // store the access key as the json object name
-                this.slides.push(slide);
+                self.slides.push(slide);
             }
         }
+
+        // start preloader
+        preloader.start(self.slides);
 
         // start looping
         this.startLoop();
@@ -118,14 +122,28 @@ var loop = {
         // LOADER ANIMATION
         var self = this;
 
+        // start video load
+        video.load();
+
         video.addEventListener('loadstart', function () {
             videoModule.loaderStart(self.videoContainer);
-            console.log("loader started");
+            console.log("loadstarted");
         });
 
-        video.addEventListener('loadeddata', function () {
+        video.addEventListener('canplaythrough', function () {
             videoModule.loaderEnd(self.videoContainer);
-            console.log("loader ended");
+            console.log("canplaythrough");
+            video.play();
+        });
+
+        video.addEventListener('waiting', function () {
+            videoModule.loaderStart(self.videoContainer);
+            console.log('waiting');
+        });
+
+        video.addEventListener('stalled', function () {
+            videoModule.loaderStart(self.videoContainer);
+            console.log('stalled');
         });
 
         // progress bar length corresponds to timeupdate function
@@ -140,8 +158,6 @@ var loop = {
 
         // INIT VIDEO CONTROLS
         buttons.initVidBtns(this.contentContainer.querySelector('.video-controls'), video);
-
-
     },
     'startLoop': function() {
         // set the currentSlide to the beginning
@@ -152,6 +168,12 @@ var loop = {
     },
     'next': function(target) {
         var self = this;
+
+        // pause current video
+        self.video.pause();
+
+        // preload next video
+        //preloader.load(self.slides[self.currentSlide].videoUrl);
 
         // once at the end, wrap around to loop
         if (self.currentSlide > self.slides.length-1) {
@@ -203,7 +225,6 @@ var loop = {
                 self.currentSlide++;
             }, 300);
         }
-
     }
 };
 

@@ -5,6 +5,17 @@
 
 
 var video = {
+    'loader': undefined,
+    'init': function() {
+        this.loader = document.createElement('div');
+
+        this.loader.classList.add('loader');
+        this.loader.innerHTML = '<svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"width="80px" height="80px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve"><path fill="#000" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z"> <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"/></path></svg>';
+
+        this.loaderStart.bind(this);
+        this.loaderEnd.bind(this);
+
+    },
     'progressBar': function(video, progressBar) {
         // get the percentage of video played
         var percentage = (video.currentTime / video.duration) * 100;
@@ -13,26 +24,12 @@ var video = {
         progressBar.value = percentage;
     },
     'loaderStart': function(root) {
-        // create the loader div
-        var loader = document.createElement('div');
-        loader.classList.add('loader');
 
         // fill it with the loader SVG
-        loader.innerHTML = '<svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"width="80px" height="80px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve"><path fill="#000" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z"> <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"/></path></svg>';
-        root.appendChild(loader);
+        root.appendChild(this.loader);
     },
     'loaderEnd': function(root) {
-        var loader = root.querySelectorAll('.loader');
-
-        setTimeout(function() {
-            for (var i = 0; i < loader.length; i++) {
-                // fade out the loader
-                loader[i].classList.add('fade-out');
-
-                // remove it from the DOM
-                root.removeChild(loader[i]);
-            }
-        });
+        root.removeChild(this.loader);
     }
 };
 

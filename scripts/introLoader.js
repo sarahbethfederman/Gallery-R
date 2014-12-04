@@ -9,18 +9,35 @@ var introLoader = {
     'init': function(container, video, progressBar, skipBtn) {
         var self = this;
 
+        // init the video events module
+        videoModule.init();
+
         // set up the skip button
         buttons.makeButton(skipBtn, function() {
             self.endIntro(container, video);
         });
 
+        // start video load
+        video.load();
+
         // loader animation
         video.addEventListener('loadstart', function () {
             videoModule.loaderStart(container);
+            console.log("loadstarted");
         });
 
-        video.addEventListener('canplay', function () {
+        video.addEventListener('canplaythrough', function () {
             videoModule.loaderEnd(container);
+        });
+
+        video.addEventListener('waiting', function () {
+            videoModule.loaderStart(container);
+            console.log('waiting');
+        });
+
+        video.addEventListener('stalled', function () {
+            videoModule.loaderStart(container);
+            console.log('waiting');
         });
 
         // progress bar length corresponds to timeupdate function
